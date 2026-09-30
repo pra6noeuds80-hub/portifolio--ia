@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Géométrie sacrée & fréquences</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&display=swap">
+<style>
+:root{--bg:#0c1b26;--bg2:#12283a;--ink:#eee6d4;--mu:#9fb0b6;--au:#d9a441;--tq:#4fd1c5;--ln:#26445a;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:700;line-height:1.1;margin:0}
+h1{font-size:clamp(2.4rem,7vw,4.6rem);max-width:14em}
+h2{font-size:clamp(1.8rem,4.5vw,2.6rem);margin-bottom:.4em;color:var(--au)}
+h3{font-size:1.35rem}
+section,header{max-width:1040px;margin:0 auto;padding:56px 20px}
+header{padding-top:72px}
+.lead{max-width:38em;color:var(--mu);font-size:1.1rem;margin:20px 0 28px}
+nav{display:flex;gap:10px;flex-wrap:wrap}
+a.b,button,select{font:inherit}
+nav a{color:var(--ink);text-decoration:none;border:1px solid var(--au);padding:8px 18px;border-radius:99px}
+nav a:hover,nav a:focus-visible{background:var(--au);color:var(--bg)}
+p{max-width:44em}
+.note{border-left:3px solid var(--tq);padding:6px 14px;color:var(--mu);font-size:.95rem;background:var(--bg2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:22px}
+.card{background:var(--bg2);border:1px solid var(--ln);border-radius:6px;padding:16px}
+.card svg{width:64px;height:64px;float:right;margin:0 0 6px 10px}
+.card svg *{fill:none;stroke:var(--au);stroke-width:1.5}
+.card p{margin:.4em 0 0;color:var(--mu);font-size:.95rem}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px;align-items:start;margin-top:22px}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+canvas{width:100%;max-width:560px;aspect-ratio:1;display:block;border-radius:50%;background:#070f16;border:1px solid var(--ln)}
+#fd{font:700 2rem "Cormorant Garamond",Georgia,serif;color:var(--tq);text-align:center;margin:8px 0}
+.fb{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+button,select{background:var(--bg2);color:var(--ink);border:1px solid var(--ln);border-radius:6px;padding:8px 10px;cursor:pointer;text-align:left}
+button:hover,button:focus-visible,select:focus-visible{border-color:var(--au)}
+button b{display:block;color:var(--au)}
+button span{font-size:.8rem;color:var(--mu);line-height:1.25;display:block}
+button.on{border-color:var(--tq);background:#123a44}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0;align-items:center}
+label{display:block;font-size:.9rem;color:var(--mu);margin:8px 0}
+label b{color:var(--ink);float:right}
+input[type=range]{width:100%;accent-color:var(--au)}
+#chips{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}
+#chips button{border-radius:99px;padding:5px 12px;font-size:.88rem}
+#info{min-height:4.8em}
+#info b{font:700 1.4rem "Cormorant Garamond",Georgia,serif;color:var(--au)}
+footer{max-width:1040px;margin:0 auto;padding:30px 20px 50px;color:var(--mu);font-size:.85rem;border-top:1px solid var(--ln)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+#tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.pg{display:none}.pg.show{display:block}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px;align-items:start;margin-top:18px}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+label{display:block;font-size:.9rem;color:var(--mu);margin:8px 0}label b{color:var(--ink);float:right}
+input[type=range]{width:100%;accent-color:var(--au)}
+.note{border-left:3px solid var(--tq);padding:6px 14px;color:var(--mu);font-size:.95rem;background:var(--bg2)}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:18px}
+.c{background:var(--bg2);border:1px solid var(--ln);border-radius:6px;padding:14px}.c p{margin:.4em 0 0;color:var(--mu);font-size:.95rem}
+table{border-collapse:collapse;font-size:.92rem}td,th{border-bottom:1px solid var(--ln);padding:4px 12px 4px 0;text-align:left}
+#big{font:700 1.8rem "Cormorant Garamond",Georgia,serif;color:var(--tq)}
+h3{font-size:1.3rem;color:var(--au)}
+.mu{color:var(--mu)}
+.pg canvas{border-radius:8px;touch-action:none;max-width:520px}
+a.x{color:var(--tq)}
+.pg input:not([type=range]){background:var(--bg2);color:var(--ink);border:1px solid var(--ln);border-radius:6px;padding:8px;font:inherit;width:100%}
+#approfondir{border-top:1px solid var(--ln)}
+nav{position:sticky;top:0}
+</style></head><body>
+<header>
+<h1>Le langage caché des formes et des sons</h1>
+<p class="lead">Partout dans le monde, des temples d’Égypte aux cathédrales, des mandalas tibétains aux étoiles de l’Alhambra, les humains ont dessiné les mêmes formes et cherché les mêmes notes. Ici, on les regarde, on les écoute, et on crée les siennes.</p>
+<nav><a href="#formes">Les formes</a><a href="#sons">Écouter les fréquences</a><a href="#mandala">Créer un mandala</a><a href="#melodie">Mélodie</a><a href="#approfondir">Approfondir</a></nav>
+</header>
+
+<section id="formes">
+<h2>Les formes : ce que l’on voit</h2>
+<p>La géométrie sacrée part d’une idée simple : chaque nombre a une forme, et chaque forme porte un sens. Toutes les figures naissent d’un seul point qui devient cercle.</p>
+<div class="grid" id="fg"></div>
+<p class="note" style="margin-top:20px">Aller plus loin : <a class="x" href="#approfondir" onclick="goDeep('platon')">les solides de Platon en 3D</a> · <a class="x" href="#approfondir" onclick="goDeep('or')">le nombre d’or dans le vivant</a>.</p>
+</section>
+
+<section id="sons">
+<h2>Les fréquences : ce que l’on entend</h2>
+<p>Un son est une vibration comptée en hertz (Hz) : plus le nombre est haut, plus la note est aiguë. Appuyez sur une fréquence pour l’entendre. Le motif à gauche est une image inspirée de la cymatique (le sable qui dessine des figures sur une plaque qui vibre) ; il est illustratif.</p>
+<div class="two">
+<div><canvas id="cy" width="240" height="240" aria-label="Motif inspiré de la cymatique"></canvas><div id="fd">— Hz</div></div>
+<div>
+<div class="fb" id="fb"></div>
+<div class="row">
+<button id="sch"><b>7,83 Hz · Schumann</b><span>Battement binaural (casque conseillé)</span></button>
+<button id="st"><b>Arrêter</b><span>Couper le son</span></button>
+</div>
+<label>Timbre
+<select id="mode"><option value="pur">Son pur</option><option value="harm">Son riche (harmoniques)</option><option value="bin">Battement binaural (casque)</option></select></label>
+<label>Volume <b id="vv">60</b><input type="range" id="vol" min="0" max="100" value="60"></label>
+</div></div>
+<p class="note" style="margin-top:22px">Sons et formes se rejoignent par les proportions : l’octave est un rapport 2:1, la quinte 3:2, la quarte 4:3. Pythagore les mesurait sur une corde tendue, le monocorde. Les significations attribuées à chaque fréquence viennent des traditions et des pratiques de méditation ; elles sont symboliques et n’ont pas de preuve scientifique d’effet thérapeutique.</p>
+<p style="margin-top:16px">Aller plus loin : <a class="x" href="#approfondir" onclick="goDeep('son')">les proportions des sons et les figures de Lissajous</a>.</p>
+</section>
+
+<section id="mandala">
+<h2>Créer un mandala</h2>
+<p>Choisissez une tradition du monde, ajustez la symétrie, les couches et les couleurs. Clic droit (ou appui long) sur le mandala pour l’enregistrer.</p>
+<div id="chips"></div>
+<div class="two">
+<div><canvas id="cv" width="900" height="900" aria-label="Mandala"></canvas></div>
+<div>
+<div id="info"></div>
+<label>Symétrie (pétales, branches) <b id="nv">8</b><input type="range" id="n" min="3" max="24" value="8"></label>
+<label>Couches <b id="Lv">3</b><input type="range" id="L" min="1" max="4" value="3"></label>
+<label>Épaisseur du trait <b id="lwv">2</b><input type="range" id="lw" min="1" max="6" value="2"></label>
+<label>Lueur <b id="glv">12</b><input type="range" id="gl" min="0" max="30" value="12"></label>
+<div class="row">
+<select id="pal" aria-label="Palette"><option value="or">Or antique</option><option value="lotus">Lotus</option><option value="mer">Turquoise</option><option value="vio">Violet</option><option value="feu">Feu</option></select>
+<label style="margin:0"><input type="checkbox" id="an"> Faire tourner</label>
+</div>
+<label>Accompagner d’un son (timbre choisi plus haut)
+<select id="ms"><option value="0">Silence</option></select></label>
+<label>Mélodie du mandala (gamme)<select id="mgs"><option value="pent">Pentatonique</option><option value="maj">Majeure</option><option value="dor">Dorienne</option></select></label>
+<div class="row"><button id="mmp">Jouer la mélodie de ce mandala</button><button id="mms">Arrêter</button></div>
+<p class="note">La mélodie naît de la structure du mandala affiché : elle change avec la tradition, la symétrie et les couches. Un point blanc suit le parcours sur le dessin.</p>
+</div></div>
+<p class="note" style="margin-top:20px">Envie d’en savoir plus sur ces traditions ? <a class="x" href="#approfondir" onclick="goDeep('monde')">fiches sur les traditions du monde</a>.</p>
+</section>
+
+<section id="melodie">
+<h2>La mélodie d’une figure</h2>
+<p>Ici une figure devient une partition. Un point se promène sur ses lignes, toujours vers le point le moins visité. L’angle du point choisit la note dans la gamme, sa distance au centre choisit l’octave (au centre, note grave), et la longueur de la ligne choisit la durée : une longue ligne donne une note longue. Rien n’est laissé au hasard, donc la même figure donne toujours la même mélodie.</p>
+<div class="two"><canvas id="mc" width="700" height="700" aria-label="Figure et parcours de la mélodie"></canvas>
+<div>
+<label>Figure<select id="mfig"><option value="metatron">Cube de Métatron</option><option value="fleur">Fleur de vie</option><option value="arbre">Arbre de vie (Kabbale)</option><option value="etoile">Étoile à 12 branches</option><option value="penta">Pentagramme</option><option value="tournesol">Tournesol (angle d’or)</option></select></label>
+<label>Gamme<select id="msc"><option value="pent">Pentatonique (5 notes)</option><option value="maj">Majeure (7 notes)</option><option value="dor">Dorienne (mineure douce)</option></select></label>
+<label>Note de départ<select id="mb"><option value="256">256 Hz (Do)</option><option value="432">432 Hz</option><option value="528">528 Hz</option></select></label>
+<label>Tempo <b id="mtv">80</b><input type="range" id="mt" min="40" max="160" value="80"></label>
+<div class="row"><button id="mplay">Jouer la mélodie</button><button id="mstop">Arrêter</button></div>
+<p id="mn" class="mu"></p>
+<p class="note">Les noms sont relatifs à la note de départ (Do). ↑ note plus aiguë, ↓ note plus grave. Les gammes utilisent des rapports simples (3:2, 5:4…), comme dans la page « Proportions des sons ».</p>
+</div></div></section>
+
+<section id="approfondir">
+<div>
+<h2>Approfondir</h2>
+<p class="mu">Quatre pages pour aller plus loin : les solides en 3D, le nombre d’or dans le vivant, les proportions des sons et les traditions du monde. Retour aux <a class="x" href="#formes">formes</a>, aux <a class="x" href="#sons">fréquences</a> ou au <a class="x" href="#mandala">créateur de mandalas</a>.</p>
+<div id="tabs"></div>
+
+<section class="pg" id="platon"><h2>Les cinq solides de Platon</h2>
+<p>Il n’existe que cinq volumes dont toutes les faces sont identiques et régulières. Platon les décrit dans le <i>Timée</i> et les associe aux éléments ; le cinquième, le dodécaèdre, représente pour lui le cosmos entier. Fais-les tourner avec le doigt ou la souris.</p>
+<div class="two"><canvas id="c3" width="700" height="700" aria-label="Solide en 3D"></canvas>
+<div><div class="row" id="sb"></div><h3 id="sn"></h3><p id="st2" class="mu"></p><table id="tb"></table>
+<p class="note" style="margin-top:14px">Relation d’Euler : sommets − arêtes + faces = 2, pour tous les cinq. Chaque solide a un « double » : le cube et l’octaèdre s’échangent, comme l’icosaèdre et le dodécaèdre ; le tétraèdre est son propre double.</p></div></div></section>
+
+<section class="pg" id="or"><h2>Nombre d’or et spirales du vivant</h2>
+<p>Dans un tournesol ou une pomme de pin, chaque nouvelle graine est placée avec le même petit angle de rotation par rapport à la précédente. L’angle d’or, environ 137,5°, est celui qui ne laisse aucun vide. Change l’angle et regarde la spirale se casser en rayons.</p>
+<div class="two"><canvas id="cp" width="700" height="700" aria-label="Phyllotaxie"></canvas>
+<div><label>Angle <b id="av">137.5</b>°<input type="range" id="an2" min="90" max="180" step=".1" value="137.5"></label>
+<label>Nombre de graines <b id="nv2">500</b><input type="range" id="nn" min="50" max="1200" value="500"></label>
+<div class="row"><button id="gold">Angle d’or 137,5°</button><button id="bad">Angle de 120°</button></div>
+<p class="mu">La suite de Fibonacci : 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89… Chaque nombre est la somme des deux précédents, et le rapport entre deux termes voisins tend vers φ ≈ 1,618. Le nombre de spirales visibles dans un tournesol est presque toujours deux termes voisins (par exemple 34 et 55).</p>
+<p class="note">L’angle d’or vaut 360° × (1 − 1/φ) ≈ 137,5°. On le retrouve aussi dans le pentagramme, dont chaque segment est en rapport φ avec le suivant.</p></div></div></section>
+
+<section class="pg" id="son"><h2>Les proportions des sons</h2>
+<p>Pythagore montre qu’une corde tendue donne l’octave quand on la raccourcit de moitié, et la quinte aux deux tiers. Les accords agréables sont des rapports de petits nombres. Choisis une note de départ, puis un intervalle : tu l’entends, et la figure de Lissajous ci-contre le dessine.</p>
+<div class="two"><canvas id="cl" width="700" height="700" aria-label="Figure de Lissajous"></canvas>
+<div><label>Note de départ<select id="bs"><option value="256">256 Hz (Do pythagoricien)</option><option value="432">432 Hz</option><option value="528">528 Hz</option></select></label>
+<div id="big">—</div><div class="row" id="ib"></div>
+<p class="mu">Plus le rapport est simple, plus la figure est ordonnée et stable : l’octave (2:1) dessine un huit, la quinte (3:2) une figure plus riche. Les rapports compliqués donnent des figures confuses, que l’oreille entend comme des dissonances.</p>
+<p class="note">Casque ou haut-parleur ; le son se lance après un appui sur un intervalle.</p></div></div></section>
+
+<section class="pg" id="monde"><h2>Les traditions du monde</h2>
+<p class="mu">Des repères sur ce que les mêmes formes signifient selon les cultures. Pour dessiner ces figures toi-même : <a class="x" href="#mandala">créateur de mandalas</a>.</p>
+<div class="g" id="tg"></div></section>
+<section class="pg" id="cyma"><h2>Cymatique : le son qui dessine</h2>
+<p>En 1787, Ernst Chladni a fait vibrer une plaque de métal recouverte de sable : le sable fuit les zones qui bougent et s’entasse sur les lignes immobiles, les lignes nodales. Chaque son donne une figure. Ici, deux nombres (m et n) choisissent la figure, comme deux façons de plier la plaque.</p>
+<div class="two"><canvas id="cc" width="260" height="260" aria-label="Figure de Chladni"></canvas>
+<div><label>m <b id="kav">3</b><input type="range" id="ka" min="1" max="9" value="3"></label><label>n <b id="kbv">5</b><input type="range" id="kb" min="1" max="9" value="5"></label>
+<div class="row"><button id="kp">Écouter cette figure</button></div><p id="kf" class="mu"></p>
+<p class="note">Plus m et n sont grands, plus la figure est fine et plus la vibration est rapide. Le calcul est une version simplifiée d’une plaque carrée ; la fréquence affichée est indicative.</p></div></div></section>
+
+<section class="pg" id="quintes"><h2>Le cercle des quintes</h2>
+<p>Empile douze quintes (rapport 3:2) en ramenant chaque note dans la même octave : tu parcours les 12 notes de la gamme, disposées comme un dodécagone. Mais au douzième pas, tu ne retombes pas exactement sur ton point de départ. Touche un point pour l’écouter.</p>
+<div class="two"><canvas id="qc" width="600" height="600" aria-label="Cercle des quintes"></canvas>
+<div><div class="row"><button id="qp">Jouer les 12 quintes</button></div><p id="qi" class="mu" style="font-size:.9rem"></p>
+<p class="note">Douze quintes valent 129,746 fois la note de départ ; sept octaves valent 128 fois. Il reste un petit écart d’environ 23,5 centièmes de demi-ton, le comma pythagoricien (exagéré sur le dessin, où la spirale s’écarte). Pour que le cercle se ferme, les instruments modernes répartissent cet écart sur les 12 quintes : c’est le tempérament égal.</p></div></div></section>
+
+<section class="pg" id="archi"><h2>La géométrie sacrée dans l’architecture</h2>
+<p class="mu">Dix lieux où les nombres, le ciel et la lumière ont guidé les plans. Pour chacun, on distingue ce qui est mesuré de ce qui est légende : certains liens avec le nombre d’or, en particulier, sont débattus.</p>
+<div class="g" id="ag"></div></section>
+
+<section class="pg" id="concevoir"><h2>Concevoir un lieu</h2>
+<p>Un lieu a des proportions, et ses proportions ont un son : les murs font résonner des fréquences précises (une résonance vaut la vitesse du son, 343 m/s, divisée par deux fois la longueur), et les surfaces décident combien de temps le son dure. Compose ton plan, regarde la géométrie et écoute la pièce.</p>
+<div class="row" id="dpre"></div>
+<div class="two"><canvas id="dc" width="600" height="600" aria-label="Plan du lieu"></canvas>
+<div><label>Forme<select id="dsh"><option value="rect">Rectangle</option><option value="p6">Hexagone</option><option value="p8">Octogone</option><option value="p12">Dodécagone</option></select></label>
+<label>Proportions (rectangle)<select id="dra"></select></label>
+<label>Largeur ou diamètre (m) <b id="dWv">8</b><input type="range" id="dW" min="3" max="40" step=".5" value="8"></label>
+<label>Hauteur (m) <b id="dHv">4</b><input type="range" id="dH" min="2.5" max="30" step=".5" value="4"></label>
+<label>Absorption des murs <b id="dalv">0.10</b><input type="range" id="dal" min="3" max="60" value="10"></label>
+<p id="drs" class="mu"></p><table id="dtab"></table><p id="din" class="mu"></p>
+<div class="row"><button id="dp1">Écouter les résonances</button><button id="dp2">Écouter la pièce</button></div>
+<p class="note">Le carré et le rectangle sont découpés en carrés successifs : avec le nombre d’or, la découpe ne s’arrête jamais. Les résonances trop graves sont montées d’octaves pour être audibles. « Écouter la pièce » joue une mélodie dans une réverbération de la durée calculée (formule de Sabine, sans l’absorption de l’air). Absorption basse : pierre nue. Haute : tentures et tapis.</p></div></div></section>
+<section class="pg" id="dim12"><h2>Les 12 dimensions</h2>
+<p>Une dimension est une direction indépendante. Un point qui avance dessine une ligne (1 dimension) ; la ligne qui glisse de côté dessine un carré (2) ; le carré qui monte dessine un cube (3) ; le cube qui se déplace dans une quatrième direction dessine un hypercube. Change le nombre de dimensions : la figure tourne, chaque couleur est une direction.</p>
+<div class="two"><canvas id="dq" width="700" height="700" aria-label="Hypercube en projection"></canvas>
+<div><label>Dimensions <b id="ndv">4</b><input type="range" id="nd" min="0" max="8" value="4"></label><p id="dinf" class="mu"></p><table id="dtb"></table>
+<p class="note" style="margin-top:14px">En physique, notre espace a 3 dimensions plus le temps. La théorie des cordes en suppose 10, la théorie M en compte 11 et la théorie F 12 (Cumrun Vafa, 1996). Ce sont des modèles mathématiques : aucun n’est confirmé par l’expérience.</p></div></div>
+<h3 style="margin-top:34px">Les 12 dimensions dans les enseignements ésotériques</h3>
+<p class="mu">Il n’existe pas de liste officielle : les auteurs et les traditions ne s’accordent pas, et ces niveaux relèvent d’une croyance, non d’une mesure. Voici un schéma symbolique de synthèse pour explorer le lien avec la géométrie et le son. Chaque dimension est associée à l’harmonique de même rang (1 = note de base, 2 = octave, 3 = quinte, 4 = double octave, 5 = tierce…), un choix de ce site.</p>
+<div class="row"><button id="dpl">Jouer les 12 harmoniques</button></div>
+<div class="g" id="dg"></div></section>
+
+<section class="pg" id="anges"><h2>La géométrie des anges</h2>
+<p class="mu">Dans plusieurs traditions (chrétienne, juive, islamique), les anges sont organisés en ordres, et ces ordres suivent des nombres : 3, 9, 10, 72. Ce sont des croyances religieuses et symboliques que l’on présente ici avec leur géométrie.</p>
+<h3 style="margin-top:18px">Les 9 chœurs : trois fois trois</h3>
+<div class="two"><canvas id="nc" width="600" height="600" aria-label="Les neuf chœurs"></canvas>
+<div><p>Pseudo-Denys l’Aréopagite (vers 500) répartit les anges en trois hiérarchies de trois chœurs : Séraphins, Chérubins, Trônes (les plus proches de Dieu) ; Dominations, Vertus, Puissances (qui gouvernent l’univers) ; Principautés, Archanges, Anges (les plus proches des humains).</p>
+<p>Le dessin place les 9 chœurs sur un ennéagone. Les trois triangles relient les rangs de même position dans chaque hiérarchie : c’est une lecture géométrique de ce site, non une règle de la tradition.</p>
+<p class="mu">La Kabbale compte dix ordres (Maïmonide, XIIe siècle), rattachés aux dix sphères de l’Arbre de vie : Chayot ha-Kodesh, Ophanim, Erelim, Hashmalim, Seraphim, Malakhim, Elohim, Bene Elohim, Cherubim, Ishim, de Keter à Malkhout.</p></div></div>
+<h3 style="margin-top:34px">La roue des 72 anges</h3>
+<div class="two"><canvas id="wc" width="700" height="700" aria-label="Roue des 72 anges"></canvas>
+<div><p id="wi" style="font:700 1.3rem 'Cormorant Garamond',Georgia,serif;color:var(--tq)"></p><div class="row"><button id="wp">Jouer la roue</button></div>
+<p>Dans la tradition kabbalistique, 72 noms d’anges se tirent de trois versets de l’Exode (14:19 à 21), chacun de 72 lettres. Chaque ange gouverne 5° du zodiaque : 72 × 5° = 360°. C’est aussi 12 signes de 6 anges, et 72° est l’angle au centre du pentagone.</p>
+<p>Ici, la roue devient aussi une octave : l’ange n vaut la note de base × 2 puissance n/72. Le tour complet monte donc d’une octave, par pas de 1/72 d’octave (environ 16,7 centièmes de demi-ton).</p>
+<p class="note">Départ en haut, sens des aiguilles d’une montre (convention simplifiée ; les cartes du ciel partent du Bélier à 0°). Les orthographes des noms varient selon les auteurs.</p></div></div></section>
+<section class="pg" id="natal"><h2>Mon thème et mes anges</h2>
+<p>Entre une naissance : le programme calcule les positions du Soleil, de la Lune et des planètes, l’Ascendant et le Milieu du ciel, puis place chacun sur la roue des 72 anges (chaque ange gouverne 5° du zodiaque). Il en tire aussi ta demeure lunaire (tradition arabo-islamique) et ton jour zoroastrien. Le calcul se fait dans ton navigateur : rien n’est envoyé ni enregistré. La roue montre aussi les 12 maisons astrologiques (système Placidus), et plus bas tu trouveras les anges du christianisme, de l’hindouisme et du bouddhisme, avec ce qu’ils disent de ta date de naissance.</p>
+<div class="two"><div>
+<label>Date de naissance<input type="date" id="bd"></label>
+<label>Heure locale de naissance<input type="time" id="bt" value="12:00"></label>
+<label>Lieu<select id="bc"></select></label>
+<label>Latitude (° nord, négative au sud)<input type="number" id="bla" step=".0001"></label>
+<label>Longitude (° est, négative à l’ouest)<input type="number" id="blo" step=".0001"></label>
+<label>Fuseau horaire (nom IANA, par exemple Europe/Paris)<input type="text" id="btz" value="Europe/Paris"></label>
+<div class="row"><button id="bgo">Calculer</button><button id="bpl">Écouter mon thème</button></div>
+<p id="bmsg" class="note"></p></div>
+<canvas id="nw" width="700" height="700" aria-label="Roue des 72 anges avec les planètes"></canvas></div>
+<div id="bres" style="margin-top:20px"></div>
+<p class="note" style="margin-top:14px">Les positions viennent d’un calcul simplifié (précision de l’ordre du demi-degré) : à moins d’un demi-degré d’une limite de 5°, l’ange peut changer avec un calcul plus fin. Le fuseau et l’heure d’été sont déduits du nom du fuseau. Zodiaque tropical, départ du Bélier à 0°. Pour l’écoute, la longitude de chaque point devient une note : le cercle entier de 360° est une octave.</p>
+<h3 style="margin-top:34px">Les archanges de l’islam</h3>
+<p>Selon un hadith, les anges (<i>malāʾika</i>) sont créés de lumière. Quatre archanges sont particulièrement connus. Le Coran (69:17) parle aussi de huit anges qui porteront le Trône, un nombre qui dessine un octogone. Munkar et Nakir interrogent les défunts, les Kirâman Kâtibîn notent les actes, Ridwân garde le paradis et Mâlik l’enfer.</p>
+<div class="g" id="bam"></div>
+<p id="bmn" class="mu" style="margin-top:14px">Les 28 demeures de la Lune (<i>manāzil al-qamar</i>) divisent le cercle en 28 parts de 12°51′ ; le Coran (36:39) évoque les « stations » de la Lune. Calcule ton thème pour voir dans quelle demeure elle se trouvait. Ici, les demeures sont comptées à partir de 0° Bélier, ce qui simplifie la tradition d’origine, liée aux étoiles.</p>
+<h3 style="margin-top:34px">Les ordres zoroastriens</h3>
+<p>Autour d’Ahura Mazda, le Seigneur sage, le mazdéisme distingue trois niveaux : les six Amesha Spentas, « Immortels bienfaisants » (sept avec Spenta Mainyu, l’Esprit saint), qui veillent chacun sur une part de la création ; les yazatas, « ceux qui méritent l’adoration », dont chacun a un jour du mois ; et les fravashis, esprits gardiens de chaque être, proches de nos anges gardiens.</p>
+<div class="g" id="bzo"></div>
+<p id="bzd" class="mu" style="margin-top:14px">Le calendrier zoroastrien compte 12 mois de 30 jours, chaque jour portant le nom d’un yazata (360° ÷ 30 = 12° par jour), plus cinq jours des Gathas. Calcule ton thème pour connaître ton jour.</p>
+<h3 style="margin-top:34px">Les anges du christianisme</h3>
+<p>Les anges (<i>angeloi</i>, « messagers ») sont présents dans toute la Bible. À la Renaissance, Trithème a associé un archange à chacun des sept astres visibles, donc à chaque jour de la semaine.</p>
+<div class="g" id="bch"></div><p id="bchp" class="mu" style="margin-top:14px">Calcule ton thème pour connaître l’archange de ton jour de naissance.</p>
+<h3 style="margin-top:34px">Les êtres de lumière de l’hindouisme</h3>
+<p>L’hindouisme parle de devas (« les brillants ») plutôt que d’anges. En astrologie védique (<i>jyotish</i>), on utilise le zodiaque sidéral, décalé d’environ 24° par rapport au zodiaque tropical, et la Lune indique le nakshatra de naissance.</p>
+<div class="g" id="bhi"></div><p id="bhip" class="mu" style="margin-top:14px">Calcule ton thème pour connaître ton nakshatra.</p>
+<h3 style="margin-top:34px">Les gardiens du bouddhisme</h3>
+<p>Le bouddhisme ne connaît pas d’anges créateurs ou messagers, mais des devas, des rois célestes, des Bouddhas de sagesse et des bodhisattvas. En Thaïlande, on associe aussi à chaque jour de naissance une attitude du Bouddha.</p>
+<div class="g" id="bbu"></div><p id="bbup" class="mu" style="margin-top:14px">Calcule ton thème pour connaître ton Bouddha du jour.</p></section>
+
+
+
+</div>
+</section>
+
+<footer>Formes et symboles issus de traditions du monde (Égypte, Inde, Tibet, monde islamique, celtes, Chine, Mésoamérique, kabbale, Grèce, peuples amérindiens, Europe médiévale, Mésopotamie, nordiques). Les dessins sont des interprétations simplifiées, faites pour l’exploration et non des reproductions rituelles.</footer>
+
+<script>(function(){
+const $=i=>document.getElementById(i),TAU=Math.PI*2,PI=Math.PI;
+/* ---- Cartes des formes ---- */
+const S=[
+['1 · Cercle','Unité, origine, œuf cosmique. Tout commence par un point qui s’étend.','<circle cx="32" cy="32" r="22"/><circle cx="32" cy="32" r="2"/>'],
+['2 · Vesica piscis','Deux cercles qui se chevauchent : la naissance de la forme. On la retrouve dans l’amande des icônes chrétiennes.','<circle cx="24" cy="32" r="18"/><circle cx="40" cy="32" r="18"/>'],
+['3 · Triangle','Trinité : Trimurti hindoue, Trinité chrétienne, triskèle celte. La plus stable des formes.','<path d="M32 8 56 54H8Z"/>'],
+['4 · Carré','La Terre, les 4 éléments, les 4 directions, les 4 saisons. Base de la plupart des temples.','<rect x="12" y="12" width="40" height="40"/>'],
+['5 · Pentagone','Le nombre d’or vit dans son étoile. Vénus dessine un pentagramme dans le ciel en 8 ans.','<path d="M32 8 55 25 46 52H18L9 25Z M32 8 46 52 9 25H55L18 52Z"/>'],
+['6 · Hexagone','Ruches, flocons de neige, cristaux. La Fleur de vie est bâtie sur ce nombre.','<path d="M32 8 53 20V44L32 56 11 44V20Z"/><circle cx="32" cy="32" r="12"/>'],
+['8 · Octogone','Régénération et infini (le 8 couché). Étoile d’Ishtar, Bagua chinois, dôme du Rocher à Jérusalem.','<path d="M22 8H42L56 22V42L42 56H22L8 42V22Z"/>'],
+['12 · Dodécagone','Les 12 mois, les 12 signes du zodiaque, les 12 apôtres : le cycle complet du ciel.','<circle cx="32" cy="32" r="24"/><path d="M32 8 56 32 32 56 8 32Z"/>'],
+['φ · Spirale d’or','Rapport 1,618 : coquille du nautile, tournesol, galaxies. La croissance qui garde sa forme.','<path d="M32 32a3 3 0 0 1 3 3 6 6 0 0 1-6 6 10 10 0 0 1-10-10 16 16 0 0 1 16-16 26 26 0 0 1 26 26"/>']];
+$('fg').innerHTML=S.map(s=>`<div class="card"><svg viewBox="0 0 64 64">${s[2]}</svg><h3>${s[0]}</h3><p>${s[1]}</p></div>`).join('');
+
+/* ---- Audio ---- */
+const F=[[174,'Apaisement, ancrage'],[285,'Régénération'],[396,'Libérer la peur'],[417,'Changement, renouveau'],[528,'Transformation'],[639,'Relations, harmonie'],[741,'Expression, clarté'],[852,'Intuition, éveil'],[963,'Unité, conscience'],[136.1,'Om, année terrestre'],[432,'Accord « cosmique »'],[440,'Diapason standard']];
+let ac,osc=[],mg;
+function play(f,mode,label){stop();ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();
+const m=mode||$('mode').value,v=m=='pur'?[[f,1,0]]:m=='harm'?[[f,1,0],[1.5*f,.3,0],[2*f,.35,0],[3*f,.18,0]]:[[f,1,-1],[f+7.83,1,1]];
+mg=ac.createGain();mg.gain.value=0;mg.connect(ac.destination);
+osc=v.map(([q,g,p])=>{const o=ac.createOscillator(),gg=ac.createGain(),pn=ac.createStereoPanner();o.frequency.value=q;gg.gain.value=g*.5;pn.pan.value=p;o.connect(gg);gg.connect(pn);pn.connect(mg);o.start();return o});
+mg.gain.setTargetAtTime($('vol').value/100,ac.currentTime,.3);
+$('fd').textContent=label||(f+' Hz');cym(f);}
+function stop(){if(!osc.length)return;const o=osc,g=mg;g.gain.setTargetAtTime(0,ac.currentTime,.08);setTimeout(()=>o.forEach(x=>x.stop()),400);osc=[];$('fd').textContent='— Hz';}
+$('vol').oninput=e=>{$('vv').textContent=e.target.value;if(osc.length)mg.gain.setTargetAtTime(e.target.value/100,ac.currentTime,.05)};
+$('st').onclick=()=>{stop();$('ms').value=0};
+$('sch').onclick=()=>{$('mode').value='bin';play(200,'bin','7,83 Hz')};
+function cym(f){const c=$('cy'),x=c.getContext('2d'),W=c.width,d=x.createImageData(W,W),a=3+Math.round(f)%9,b=2+Math.round(f)%7;
+for(let j=0;j<W;j++)for(let i=0;i<W;i++){const X=(i/W-.5)*2,Y=(j/W-.5)*2,r=Math.hypot(X,Y),t=Math.atan2(Y,X),k=(j*W+i)*4;
+if(r>1)continue;const v=Math.cos(a*t)*Math.sin(b*r*PI)+.6*Math.cos((a+2)*t)*Math.sin((b+1)*r*PI),s=Math.exp(-Math.pow(v*3,2));
+d.data[k]=217*s;d.data[k+1]=164*s;d.data[k+2]=65*s;d.data[k+3]=255}
+x.putImageData(d,0,0)}
+$('fb').innerHTML=F.map(([f,t],i)=>`<button data-i="${i}"><b>${f} Hz</b><span>${t}</span></button>`).join('');
+$('fb').onclick=e=>{const b=e.target.closest('button');if(b){const f=F[b.dataset.i][0];document.querySelectorAll('#fb button').forEach(q=>q.classList.toggle('on',q==b));play(f)}};
+$('ms').innerHTML+=F.map(([f],i)=>`<option value="${f}">${f} Hz</option>`).join('');
+$('ms').onchange=e=>{+e.target.value?play(+e.target.value):stop()};
+cym(528);
+
+/* ---- Mandalas ---- */
+const PAL={or:['#d9a441','#f5e2a8','#b57a2c'],lotus:['#ff8fb1','#ffd6e4','#c94f7c'],mer:['#4fd1c5','#bff5ef','#2b8f9c'],vio:['#b39bff','#e6dcff','#6a4fd6'],feu:['#ff7a45','#ffd08a','#c23b22']};
+let c,P=PAL.or,n=8,L=3,lw=2,glow=12,rot=0,anim=false,cur='fleur';
+const k=i=>c.strokeStyle=P[i%P.length],pt=(r,a)=>[r*Math.cos(a),r*Math.sin(a)];
+function ln(p,z){c.beginPath();p.forEach((q,i)=>i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1]));z&&c.closePath();c.stroke()}
+function poly(r,m,a0=-PI/2,s=1){const p=[];for(let i=0;i<m;i++)p.push(pt(r,a0+i*s*TAU/m));ln(p,1)}
+function circ(x,y,r){c.beginPath();c.arc(x,y,r,0,TAU);c.stroke()}
+function petal(r0,r1,w,a){c.save();c.rotate(a);c.beginPath();const m=(r0+r1)/2;c.moveTo(r0,0);c.quadraticCurveTo(m,w,r1,0);c.quadraticCurveTo(m,-w,r0,0);c.stroke();c.restore()}
+const T={
+fleur:{nom:'Fleur de vie',o:'Temple d’Osiris à Abydos (Égypte), Assyrie, Chine, Inde : des cercles égaux qui se recouvrent, l’unité de toute création.',f(R){const r=R/(L+1.2);k(0);circ(0,0,r);for(let m=1;m<=L;m++){k(m);for(let i=0;i<6;i++)for(let j=0;j<m;j++){const a=i*PI/3,b=(i+2)*PI/3;circ(r*(m*Math.cos(a)+j*Math.cos(b)),r*(m*Math.sin(a)+j*Math.sin(b)),r)}}k(2);circ(0,0,r*(L+1));circ(0,0,r*(L+1.2))}},
+metatron:{nom:'Cube de Métatron',o:'Kabbale et géométrie sacrée moderne : 13 cercles reliés entre eux, qui contiennent les 5 solides de Platon.',f(R){const r=R/3.3,p=[[0,0]];for(let i=0;i<6;i++){p.push(pt(r,i*PI/3));p.push(pt(2*r,i*PI/3))}k(0);p.forEach(q=>circ(q[0],q[1],r*.5));k(1);c.globalAlpha=.6;for(let i=0;i<p.length;i++)for(let j=i+1;j<p.length;j++)ln([p[i],p[j]]);c.globalAlpha=1}},
+hindou:{nom:'Lotus & Sri Yantra',o:'Inde védique et tantrique : 9 triangles entrelacés (4 vers le haut, 5 vers le bas) dans un lotus. Shiva et Shakti unis.',f(R){for(let l=0;l<Math.min(L,3);l++){k(l);const q=n*(l+1);for(let i=0;i<q;i++)petal(R*(.62-l*.05),R*(.98-l*.1),R*.14/(l+1),i*TAU/q)}k(1);[.5,.43,.36,.29].forEach(s=>poly(R*s,3));k(2);[.47,.4,.33,.26,.19].forEach(s=>poly(R*s,3,PI/2));k(0);circ(0,0,R*.05)}},
+tibetain:{nom:'Mandala tibétain',o:'Bouddhisme vajrayana : un palais carré à quatre portes, entouré de cercles de sagesse et de pétales de lotus.',f(R){k(0);circ(0,0,R);circ(0,0,R*.9);for(let i=0;i<n;i++)petal(R*.62,R*.9,R*.15,i*TAU/n);k(1);poly(R*.6,4,PI/4);poly(R*.45,4,PI/4);for(let i=0;i<4;i++){c.save();c.rotate(i*PI/2);ln([[R*.424,-R*.08],[R*.5,-R*.08],[R*.5,R*.08],[R*.424,R*.08]]);c.restore()}k(2);circ(0,0,R*.3);for(let i=0;i<n;i++)petal(R*.05,R*.28,R*.08,i*TAU/n);for(let l=0;l<L;l++)circ(0,0,R*(.02+l*.03))}},
+islam:{nom:'Étoiles islamiques',o:'Art islamique (Alhambra, Ispahan) : étoiles à 8, 10, 12 branches. L’unité divine exprimée dans la multiplicité.',f(R){const m=Math.max(5,n);for(let l=0;l<L+1;l++){k(l);const r=R*(1-l*.17),s=Math.max(2,Math.floor((m-1)/2)-(l%2)),a=-PI/2+l*PI/m;poly(r,m,a,s);poly(r,m,a)}k(2);for(let i=0;i<m;i++){const q=pt(R*.5,i*TAU/m);circ(q[0],q[1],R*.25)}}},
+celte:{nom:'Triskèle & entrelacs celtes',o:'Celtes (Newgrange, vers 3200 av. J.-C.) : trois spirales et des cercles entrelacés, le mouvement perpétuel des trois mondes.',f(R){k(0);for(let a=0;a<3;a++){const p=[];for(let t=0;t<=1.001;t+=.02)p.push(pt(R*.55*t,a*TAU/3+t*5));ln(p)}for(let l=0;l<L;l++){k(l+1);for(let i=0;i<n;i++){const q=pt(R*.68,i*TAU/n+l*.2);circ(q[0],q[1],R*.3*(1-l*.2))}}}},
+chine:{nom:'Yin-Yang & Bagua',o:'Chine (Yi Jing, vers 1000 av. J.-C.) : deux forces qui s’engendrent l’une l’autre et 8 trigrammes de lignes pleines et brisées.',f(R){const y=R*.42,tab=[7,6,5,4,3,2,1,0];k(0);circ(0,0,y);c.beginPath();c.arc(0,-y/2,y/2,-PI/2,PI/2,false);c.arc(0,y/2,y/2,-PI/2,PI/2,true);c.stroke();circ(0,-y/2,y*.1);circ(0,y/2,y*.1);k(1);for(let i=0;i<8;i++){c.save();c.rotate(i*PI/4-PI/2);for(let j=0;j<3;j++){const r=R*(.6+j*.1),w=R*.16;if((tab[i]>>j)&1)ln([[r,-w],[r,w]]);else{ln([[r,-w],[r,-w*.2]]);ln([[r,w*.2],[r,w]])}}c.restore()}k(2);circ(0,0,R*.55);circ(0,0,R*.97)}},
+maya:{nom:'Calendriers mayas & aztèques',o:'Mésoamérique : le Tzolk’in de 260 jours (20 × 13). Le temps représenté comme une roue sacrée.',f(R){k(0);circ(0,0,R);circ(0,0,R*.62);for(let i=0;i<20;i++){c.save();c.rotate(i*TAU/20);c.strokeRect(R*.66,-R*.075,R*.26,R*.15);circ(R*.79,0,R*.03);c.restore()}k(1);for(let i=0;i<13;i++){const q=pt(R*.5,i*TAU/13);circ(q[0],q[1],R*.07)}k(2);circ(0,0,R*.3);poly(R*.22,4,PI/4);for(let i=0;i<n;i++){const a=i*TAU/n;ln([pt(R*.06,a),pt(R*.3,a)])}}},
+kabbale:{nom:'Arbre de vie (Kabbale)',o:'Tradition juive mystique : 10 sphères (sephiroth) reliées par 22 sentiers, la carte de la création descendant de Keter à Malkhout.',fix:1,f(R){const p=[[0,-1],[.5,-.72],[-.5,-.72],[.5,-.28],[-.5,-.28],[0,0],[.5,.38],[-.5,.38],[0,.62],[0,1]].map(q=>[q[0]*R*.9,q[1]*R*.9]),e=[[0,1],[0,2],[0,5],[1,2],[1,5],[1,3],[2,5],[2,4],[3,4],[3,5],[3,6],[4,5],[4,7],[5,6],[5,7],[5,8],[6,7],[6,8],[7,8],[6,9],[7,9],[8,9]];k(1);e.forEach(q=>ln([p[q[0]],p[q[1]]]));k(0);p.forEach(q=>circ(q[0],q[1],R*.075));k(2);circ(0,0,R)}},
+grec:{nom:'Pythagore & nombre d’or',o:'Grèce antique : « tout est nombre ». Le pentagramme cache le rapport d’or φ ≈ 1,618, dont la spirale grandit sans changer de forme.',f(R){for(let l=0;l<L+1;l++){k(l);const r=R*Math.pow(.618,l),a=-PI/2+l*.3;poly(r,5,a);poly(r,5,a,2);circ(0,0,r)}k(2);const p=[];for(let t=0;t<=4*PI;t+=.05){const r=R*.04*Math.exp(.3064*t);if(r<R)p.push(pt(r,t))}ln(p)}},
+amerindien:{nom:'Roue de médecine',o:'Peuples des Plaines (Amérique du Nord) : quatre directions, quatre saisons, quatre âges de la vie, autour du centre.',f(R){k(0);circ(0,0,R);circ(0,0,R*.85);ln([[-R*.85,0],[R*.85,0]]);ln([[0,-R*.85],[0,R*.85]]);for(let i=0;i<4;i++){k(i);const q=pt(R*.55,i*PI/2);circ(q[0],q[1],R*.2);circ(q[0],q[1],R*.12)}k(0);circ(0,0,R*.14);for(let i=0;i<n*2;i++)petal(R*.87,R*.99,R*.04,i*TAU/(n*2))}},
+gothique:{nom:'Rosace gothique',o:'Cathédrales d’Europe (XIIe siècle) : la lumière filtrée par des pétales de pierre, souvent en multiples de 12.',f(R){for(let l=0;l<L;l++){k(l);for(let i=0;i<n;i++)petal(R*(.3+l*.02),R*(.92-l*.16),R*(.22-l*.03),i*TAU/n)}k(1);for(let i=0;i<n;i++){const q=pt(R*.62,(i+.5)*TAU/n);circ(q[0],q[1],R*.07)}k(2);circ(0,0,R);circ(0,0,R*.95);circ(0,0,R*.16)}},
+mesop:{nom:'Étoile d’Ishtar',o:'Sumer et Babylone (vers 3000 av. J.-C.) : étoile à 8 branches de la déesse Inanna-Ishtar, liée à la planète Vénus.',f(R){k(0);for(let i=0;i<8;i++){const a=i*PI/4;ln([pt(R,a),pt(R*.16,a+PI/8),pt(R*.16,a-PI/8)],1)}k(1);for(let i=0;i<8;i++){const a=(i+.5)*PI/4,p=[];for(let t=.16;t<=.78;t+=.02)p.push(pt(R*t,a+Math.sin(t*30)*.05));ln(p)}k(2);circ(0,0,R*.16);circ(0,0,R*.98)}},
+nord:{nom:'Aegishjálmr & Vegvísir',o:'Peuples nordiques (Vikings) : huit branches à fourches, symboles de protection et de voyage sûr.',f(R){k(0);circ(0,0,R*.14);for(let i=0;i<8;i++){const a=i*PI/4;k(0);ln([pt(R*.14,a),pt(R*.92,a)]);k(1);for(let j=0;j<L;j++){const r=R*(.92-j*.13);ln([pt(r-R*.1,a+.3),pt(r,a),pt(r-R*.1,a-.3)])}}k(2);circ(0,0,R*.98)}}};
+
+function render(){const cv=$('cv'),W=cv.width;c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.fillStyle='#070f16';c.fillRect(0,0,W,W);c.translate(W/2,W/2);
+c.lineWidth=lw;c.lineJoin=c.lineCap='round';c.shadowColor=P[0];c.shadowBlur=glow;c.strokeStyle=P[0];
+if(!T[cur].fix)c.rotate(rot);T[cur].f(W*.46);if(window.mandOver)window.mandOver(c,W*.46)}
+function upd(){n=+$('n').value;L=+$('L').value;lw=+$('lw').value;glow=+$('gl').value;P=PAL[$('pal').value];anim=$('an').checked;
+$('nv').textContent=n;$('Lv').textContent=L;$('lwv').textContent=lw;$('glv').textContent=glow;render()}
+function pick(id){cur=id;document.querySelectorAll('#chips button').forEach(b=>b.classList.toggle('on',b.dataset.id==id));$('info').innerHTML=`<b>${T[id].nom}</b><p style="margin:.2em 0 0;color:var(--mu)">${T[id].o}</p>`;render()}
+$('chips').innerHTML=Object.keys(T).map(i=>`<button data-id="${i}">${T[i].nom}</button>`).join('');
+$('chips').onclick=e=>{const b=e.target.closest('button');b&&pick(b.dataset.id)};
+['n','L','lw','gl','pal','an'].forEach(i=>$(i).oninput=upd);
+(function loop(){if(anim){rot+=.004;render()}requestAnimationFrame(loop)})();
+window.mandState=()=>({cur,n,L});window.mandRender=render;upd();pick('fleur');
+})();</script>
+<script>(function(){
+const $=i=>document.getElementById(i),PI=Math.PI,TAU=PI*2,PH=(1+Math.sqrt(5))/2;
+const TABS=[['platon','Solides de Platon'],['or','Nombre d’or'],['son','Proportions des sons'],['monde','Traditions du monde'],['cyma','Cymatique'],['quintes','Cercle des quintes'],['archi','Architecture'],['concevoir','Concevoir un lieu'],['dim12','Les 12 dimensions'],['anges','Géométrie des anges'],['natal','Thème natal & anges du monde']];
+$('tabs').innerHTML=TABS.map(t=>`<button data-i="${t[0]}">${t[1]}</button>`).join('');
+function show(id){document.querySelectorAll('.pg').forEach(s=>s.classList.toggle('show',s.id==id));document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.i==id))}
+$('tabs').onclick=e=>{const b=e.target.closest('button');b&&show(b.dataset.i)};
+/* --- Solides --- */
+const sg=[1,-1],cube=[];sg.forEach(a=>sg.forEach(b=>sg.forEach(c=>cube.push([a,b,c]))));
+const ico=[],dod=cube.slice();sg.forEach(a=>sg.forEach(b=>{ico.push([0,a,b*PH],[a,b*PH,0],[b*PH,0,a]);dod.push([0,a/PH,b*PH],[a/PH,b*PH,0],[b*PH,0,a/PH])}));
+const SOL={tet:['Tétraèdre','Feu',[[1,1,1],[1,-1,-1],[-1,1,-1],[-1,-1,1]],4,'Le plus simple et le plus pointu : 4 triangles. Platon y voit le feu, vif et tranchant.'],
+cub:['Cube (hexaèdre)','Terre',cube,6,'6 carrés, la stabilité même. Platon y voit la terre, solide et immobile.'],
+oct:['Octaèdre','Air',[[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]],8,'8 triangles, il tourne facilement sur lui-même : l’air, léger et mobile.'],
+ico:['Icosaèdre','Eau',ico,20,'20 triangles, presque une sphère : l’eau, qui coule.'],
+dod:['Dodécaèdre','Cosmos (éther)',dod,12,'12 pentagones, donc le nombre d’or partout. Platon y voit la forme dont le ciel est fait.']};
+let cs='tet',rx=.5,ry=.5,drag=null,ED=[];
+function pick(k){cs=k;const s=SOL[k],V=s[2];let d=1e9;for(let i=0;i<V.length;i++)for(let j=i+1;j<V.length;j++)d=Math.min(d,Math.hypot(V[i][0]-V[j][0],V[i][1]-V[j][1],V[i][2]-V[j][2]));
+ED=[];for(let i=0;i<V.length;i++)for(let j=i+1;j<V.length;j++)if(Math.abs(Math.hypot(V[i][0]-V[j][0],V[i][1]-V[j][1],V[i][2]-V[j][2])-d)<1e-3)ED.push([i,j]);
+$('sn').textContent=s[0]+' · '+s[1];$('st2').textContent=s[4];$('tb').innerHTML=`<tr><th>Faces</th><td>${s[3]}</td></tr><tr><th>Sommets</th><td>${V.length}</td></tr><tr><th>Arêtes</th><td>${ED.length}</td></tr>`;
+document.querySelectorAll('#sb button').forEach(b=>b.classList.toggle('on',b.dataset.k==k))}
+$('sb').innerHTML=Object.keys(SOL).map(k=>`<button data-k="${k}">${SOL[k][0].split(' ')[0]}</button>`).join('');
+$('sb').onclick=e=>{const b=e.target.closest('button');b&&pick(b.dataset.k)};
+const c3=$('c3');c3.onpointerdown=e=>{drag=[e.clientX,e.clientY];c3.setPointerCapture(e.pointerId)};
+c3.onpointermove=e=>{if(drag){ry+=(e.clientX-drag[0])*.01;rx+=(e.clientY-drag[1])*.01;drag=[e.clientX,e.clientY]}};
+c3.onpointerup=()=>drag=null;
+function draw3(){const x=c3.getContext('2d'),W=c3.width,V=SOL[cs][2],m=Math.max(...V.map(v=>Math.hypot(...v))),sc=W*.3/m;
+x.fillStyle='#070f16';x.fillRect(0,0,W,W);x.translate(W/2,W/2);
+const cx=Math.cos(rx),sx=Math.sin(rx),cy=Math.cos(ry),sy=Math.sin(ry);
+const P=V.map(v=>{let[a,b,c]=v;let y=b*cx-c*sx,z=b*sx+c*cx;let X=a*cy+z*sy;z=-a*sy+z*cy;const f=1/(1-z/(m*4));return[X*sc*f,y*sc*f,z]});
+x.strokeStyle='#d9a441';x.lineWidth=3;x.shadowColor='#d9a441';x.shadowBlur=12;x.lineCap='round';
+ED.forEach(([i,j])=>{x.globalAlpha=.5+.5*((P[i][2]+P[j][2])/(2*m)+.5);x.beginPath();x.moveTo(P[i][0],P[i][1]);x.lineTo(P[j][0],P[j][1]);x.stroke()});
+x.globalAlpha=1;x.fillStyle='#4fd1c5';P.forEach(p=>{x.beginPath();x.arc(p[0],p[1],6,0,TAU);x.fill()});x.setTransform(1,0,0,1,0,0)}
+/* --- Phyllotaxie --- */
+function drawP(){const cv=$('cp'),x=cv.getContext('2d'),W=cv.width,N=+$('nn').value,a=+$('an2').value*PI/180,k=W*.47/Math.sqrt(N);
+$('av').textContent=$('an2').value;$('nv2').textContent=N;x.fillStyle='#070f16';x.fillRect(0,0,W,W);
+for(let i=1;i<=N;i++){const r=k*Math.sqrt(i),t=i*a;x.fillStyle=`hsl(${(i*.35+40)%360},70%,${45+20*i/N}%)`;x.beginPath();x.arc(W/2+r*Math.cos(t),W/2+r*Math.sin(t),Math.max(2,k*.42),0,TAU);x.fill()}}
+['an2','nn'].forEach(i=>$(i).oninput=drawP);$('gold').onclick=()=>{$('an2').value=137.5;drawP()};$('bad').onclick=()=>{$('an2').value=120;drawP()};
+/* --- Sons --- */
+const IV=[['Unisson',1,1],['Ton (seconde)',9,8],['Tierce mineure',6,5],['Tierce majeure',5,4],['Quarte',4,3],['Quinte',3,2],['Octave',2,1]];
+let ac,iv=IV[5],ph=0;
+$('ib').innerHTML=IV.map((v,i)=>`<button data-i="${i}">${v[0]} ${v[1]}:${v[2]}</button>`).join('');
+function tone(fs){ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();const g=ac.createGain(),t=ac.currentTime;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.25,t+.15);g.gain.linearRampToValueAtTime(0,t+2.5);g.connect(ac.destination);
+fs.forEach(f=>{const o=ac.createOscillator();o.frequency.value=f;o.connect(g);o.start(t);o.stop(t+2.6)})}
+$('ib').onclick=e=>{const b=e.target.closest('button');if(!b)return;iv=IV[b.dataset.i];const f=+$('bs').value,f2=f*iv[1]/iv[2];$('big').textContent=`${f} Hz + ${Math.round(f2*10)/10} Hz`;tone([f,f2])};
+function drawL(){const cv=$('cl'),x=cv.getContext('2d'),W=cv.width;x.fillStyle='#070f16';x.fillRect(0,0,W,W);x.strokeStyle='#4fd1c5';x.lineWidth=3;x.shadowColor='#4fd1c5';x.shadowBlur=10;x.beginPath();
+for(let t=0;t<=TAU*iv[2]*1.001;t+=.01){const X=W/2+W*.42*Math.sin(iv[1]*t+ph),Y=W/2+W*.42*Math.sin(iv[2]*t);t?x.lineTo(X,Y):x.moveTo(X,Y)}x.stroke();x.shadowBlur=0}
+/* --- Traditions --- */
+const TR=[['Égypte ancienne','La Fleur de vie est gravée au temple d’Osiris à Abydos. L’Œil d’Horus sert aussi de mesure : ses six parties valent 1/2, 1/4, 1/8, 1/16, 1/32 et 1/64, soit 63/64 au total.'],
+['Inde','Les yantras sont des diagrammes de méditation ; le Sri Yantra emboîte 9 triangles. Le nombre 108 revient partout : les chapelets (malas) ont 108 grains.'],
+['Bouddhisme tibétain','Le mandala de sable est construit pendant des jours par des moines, puis balayé et versé dans une rivière pour rappeler que tout est impermanent.'],
+['Monde islamique','Sans représentation de figures dans l’art religieux, la géométrie devient le langage principal : arabesques, étoiles et pavages (girih), comme à l’Alhambra.'],
+['Celtes','La triple spirale de Newgrange (Irlande) date d’environ 3200 av. J.-C., donc plus ancienne que les pyramides de Gizeh. Elle figure sans doute les cycles.'],
+['Chine','Le Yi Jing combine 8 trigrammes en 64 hexagrammes de lignes pleines et brisées. Le Yin-Yang montre que chaque force contient le germe de l’autre.'],
+['Mayas','Le Tzolk’in de 260 jours croise 20 noms de jours et 13 nombres. Avec le calendrier solaire de 365 jours, ils reviennent au même point tous les 52 ans.'],
+['Grèce antique','Pour les pythagoriciens, « tout est nombre » : musique, astres et formes obéissent à des rapports. Le pentagramme était leur signe de reconnaissance.'],
+['Peuples amérindiens','La roue de médecine relie quatre directions, quatre saisons et quatre âges de la vie autour d’un centre. Ses couleurs varient d’un peuple à l’autre.'],
+['Kabbale','L’Arbre de vie place 10 sphères reliées par 22 sentiers, autant que de lettres de l’alphabet hébreu.']];
+$('tg').innerHTML=TR.map(t=>`<div class="c"><h3>${t[0]}</h3><p>${t[1]}</p></div>`).join('');
+(function loop(){if($('platon').classList.contains('show')){if(!drag){ry+=.006;rx+=.002}draw3()}
+if($('son').classList.contains('show')){ph+=.02;drawL()}requestAnimationFrame(loop)})();
+pick('tet');drawP();show('platon');
+
+window.goDeep=show;})();</script><script>(function(){
+const $=i=>document.getElementById(i),TAU=Math.PI*2,D=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+const hx=(r,i)=>[r*Math.cos(i*Math.PI/3),r*Math.sin(i*Math.PI/3)],ring=m=>Array.from({length:m},(_,i)=>[Math.cos(i*TAU/m),Math.sin(i*TAU/m)]);
+function minE(p){let d=1e9;for(let i=0;i<p.length;i++)for(let j=i+1;j<p.length;j++)d=Math.min(d,D(p[i],p[j]));const e=[];for(let i=0;i<p.length;i++)for(let j=i+1;j<p.length;j++)if(D(p[i],p[j])<d*1.02)e.push([i,j]);return e}
+const all=p=>{const e=[];for(let i=0;i<p.length;i++)for(let j=i+1;j<p.length;j++)e.push([i,j]);return e};
+const FIG={
+metatron(){const p=[[0,0]];for(let i=0;i<6;i++)p.push(hx(1,i));for(let i=0;i<6;i++)p.push(hx(2,i));return{p,e:all(p)}},
+fleur(){const p=[[0,0]];for(let m=1;m<=2;m++)for(let i=0;i<6;i++)for(let j=0;j<m;j++){const a=hx(m,i),b=hx(1,i+2);p.push([a[0]+j*b[0],a[1]+j*b[1]])}return{p,e:minE(p)}},
+arbre(){const p=[[0,-1],[.5,-.72],[-.5,-.72],[.5,-.28],[-.5,-.28],[0,0],[.5,.38],[-.5,.38],[0,.62],[0,1]];return{p,e:[[0,1],[0,2],[0,5],[1,2],[1,5],[1,3],[2,5],[2,4],[3,4],[3,5],[3,6],[4,5],[4,7],[5,6],[5,7],[5,8],[6,7],[6,8],[7,8],[6,9],[7,9],[8,9]]}},
+etoile(){return{p:ring(12),e:Array.from({length:12},(_,i)=>[i,(i+5)%12])}},
+penta(){return{p:ring(5),e:Array.from({length:5},(_,i)=>[i,(i+2)%5])}},
+tournesol(){const p=Array.from({length:24},(_,i)=>{const r=Math.sqrt(i),t=i*137.508*Math.PI/180;return[r*Math.cos(t),r*Math.sin(t)]});return{p,e:p.slice(1).map((_,i)=>[i,i+1])}}};
+const SC={pent:{r:[1,9/8,5/4,3/2,5/3],nm:['Do','Ré','Mi','Sol','La']},maj:{r:[1,9/8,5/4,4/3,3/2,5/3,15/8],nm:['Do','Ré','Mi','Fa','Sol','La','Si']},dor:{r:[1,9/8,6/5,4/3,3/2,5/3,16/9],nm:['Do','Ré','Mi♭','Fa','Sol','La','Si♭']}};
+function genG(f,sk,base,N=32){const p=f.p,e=f.e,s=SC[sk],adj=p.map(()=>[]);let L=0;
+e.forEach(([a,b])=>{const l=D(p[a],p[b]);L=Math.max(L,l);adj[a].push([b,l]);adj[b].push([a,l])});
+const vis=p.map(()=>0),seq=[0],dl=[];let cur=0,prev=-1;vis[0]=1;
+for(let i=1;i<N;i++){const c=adj[cur].slice().sort((x,y)=>vis[x[0]]-vis[y[0]]||(x[0]==prev)-(y[0]==prev)||y[1]-x[1]||x[0]-y[0])[0];dl.push(c[1]/L);prev=cur;cur=c[0];vis[cur]++;seq.push(cur)}
+dl.push(1);const R=Math.max(...p.map(q=>Math.hypot(...q)))||1;
+const notes=seq.map((i,j)=>{const q=p[i],th=(Math.atan2(q[1],q[0])+TAU)%TAU,deg=Math.floor(th/TAU*s.r.length)%s.r.length,oc=Math.round(Math.hypot(...q)/R*2)-1,x=dl[j];
+return{i,deg,oc,f:base*s.r[deg]*Math.pow(2,oc),d:x>=.7?1:x>=.4?.5:.25}});
+return{p,e,seq,notes,s}}
+let cur=null,playing=false,ac,nodes=[],END=0;
+function draw(k){const cv=$('mc'),x=cv.getContext('2d'),W=cv.width,{p,e,seq}=cur,R=Math.max(...p.map(q=>Math.hypot(...q)))||1,sc=W*.4/R,P=p.map(q=>[W/2+q[0]*sc,W/2+q[1]*sc]);
+x.fillStyle='#070f16';x.fillRect(0,0,W,W);x.lineCap=x.lineJoin='round';
+x.strokeStyle='rgba(217,164,65,.28)';x.lineWidth=2;e.forEach(([a,b])=>{x.beginPath();x.moveTo(P[a][0],P[a][1]);x.lineTo(P[b][0],P[b][1]);x.stroke()});
+const up=k<0?seq.length-1:k;x.strokeStyle='#4fd1c5';x.lineWidth=4;x.shadowColor='#4fd1c5';x.shadowBlur=10;x.globalAlpha=k<0?.4:1;x.beginPath();
+for(let i=0;i<=up;i++){const q=P[seq[i]];i?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1])}x.stroke();x.globalAlpha=1;x.shadowBlur=0;
+x.fillStyle='#d9a441';P.forEach(q=>{x.beginPath();x.arc(q[0],q[1],6,0,TAU);x.fill()});
+if(k>=0){const q=P[seq[k]];x.fillStyle='#fff';x.shadowColor='#fff';x.shadowBlur=20;x.beginPath();x.arc(q[0],q[1],14,0,TAU);x.fill();x.shadowBlur=0}}
+function stopP(){playing=false;nodes.forEach(o=>{try{o.stop()}catch(_){}});nodes=[];if(cur)draw(-1)}
+function play(){stopP();ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();const g=ac.createGain();g.gain.value=.5;g.connect(ac.destination);const beat=60/+$('mt').value;let t=ac.currentTime+.1;
+cur.notes.forEach(n=>{n.t=t;const d=n.d*beat,o=ac.createOscillator(),v=ac.createGain();o.type='triangle';o.frequency.value=n.f;v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(.5,t+.03);v.gain.exponentialRampToValueAtTime(.001,t+d*1.5);o.connect(v);v.connect(g);o.start(t);o.stop(t+d*1.5+.05);nodes.push(o);t+=d});
+END=t+.5;playing=true;(function fr(){if(!playing)return;if(ac.currentTime>END){stopP();return}let k=0;cur.notes.forEach((n,i)=>{if(n.t<=ac.currentTime)k=i});draw(k);requestAnimationFrame(fr)})()}
+function refresh(){stopP();cur=gen($('mfig').value,$('msc').value,+$('mb').value);const s=cur.s;
+$('mn').textContent=cur.notes.map(n=>s.nm[n.deg]+(n.oc<0?'↓':n.oc>0?'↑':'')).join(' ');draw(-1)}
+['mfig','msc','mb'].forEach(i=>$(i).onchange=refresh);$('mt').oninput=e=>$('mtv').textContent=e.target.value;
+$('mplay').onclick=play;$('mstop').onclick=stopP;const gen=(k,sk,b,N)=>genG(FIG[k](),sk,b,N);window.melo={gen,genG,FIG};refresh();
+})();
+</script><script>(function(){
+const $=i=>document.getElementById(i),PI=Math.PI,TAU=PI*2;
+function G(rs){rs=rs.slice().sort((a,b)=>a[0]-b[0]);const p=[],E=new Set(),idx=[],ad=(a,b)=>{if(a!==b)E.add(Math.min(a,b)+'-'+Math.max(a,b))};
+rs.forEach(([r,m,a0=-PI/2,s=1])=>{const ids=[];for(let i=0;i<m;i++){ids.push(p.length);const a=a0+i*TAU/m;p.push([r*Math.cos(a),r*Math.sin(a)])}idx.push(ids);if(m>1)ids.forEach((v,i)=>ad(v,ids[(i+s)%m]))});
+const near=(v,ids)=>{let b=ids[0],bd=1e9;ids.forEach(w=>{const d=Math.hypot(p[v][0]-p[w][0],p[v][1]-p[w][1]);if(d<bd-1e-9){bd=d;b=w}});return b};
+for(let k=0;k+1<idx.length;k++){idx[k].forEach(v=>ad(v,near(v,idx[k+1])));idx[k+1].forEach(w=>ad(w,near(w,idx[k])))}
+return{p,e:[...E].map(s=>s.split('-').map(Number))}}
+function graph(id,n,L){const rs=[];
+switch(id){
+case'fleur':{const r=1/(L+1.2);rs.push([0,1]);for(let k=1;k<=L;k++)rs.push([k*r,6*k,0]);break}
+case'metatron':{const f=melo.FIG.metatron();return{p:f.p.map(q=>[q[0]/3.3,q[1]/3.3]),e:f.e}}
+case'kabbale':{const f=melo.FIG.arbre();return{p:f.p.map(q=>[q[0]*.9,q[1]*.9]),e:f.e}}
+case'hindou':{rs.push([0,1]);[.29,.36,.43,.5].forEach(r=>rs.push([r,3,-PI/2]));[.19,.26,.33,.4,.47].forEach(r=>rs.push([r,3,PI/2]));for(let l=0;l<Math.min(L,3);l++)rs.push([.98-l*.1,n*(l+1),0]);break}
+case'tibetain':rs.push([.28,n,0],[.45,4,PI/4],[.6,4,PI/4],[.9,n,0]);break;
+case'islam':{const m=Math.max(5,n);rs.push([.5,m,0]);for(let l=0;l<=L;l++)rs.push([1-l*.17,m,-PI/2+l*PI/m,Math.max(2,Math.floor((m-1)/2)-(l%2))]);break}
+case'celte':{rs.push([.18,3,-PI/2],[.36,3,-PI/2+1],[.55,3,-PI/2+2]);for(let l=0;l<L;l++)rs.push([.68+l*.001,n,l*.2]);break}
+case'chine':rs.push([.21,2,-PI/2],[.6,8,-PI/2],[.7,8,-PI/2],[.8,8,-PI/2]);break;
+case'maya':rs.push([.22,4,PI/4],[.3,n,0],[.5,13,0],[.79,20,0]);break;
+case'grec':for(let l=0;l<=L;l++)rs.push([Math.pow(.618,l),5,-PI/2+l*.3,2]);break;
+case'amerindien':rs.push([0,1],[.55,4,0],[.93,2*n,0]);break;
+case'gothique':rs.push([.62,n,PI/n]);for(let l=0;l<L;l++)rs.push([.92-l*.16,n,0]);break;
+case'mesop':rs.push([.16,8,PI/8],[.5,8,PI/8],[1,8,0]);break;
+case'nord':rs.push([.14,8,0],[.5,8,0],[.92,8,0]);break;
+default:rs.push([.5,n],[1,n])}
+return G(rs)}
+let ac,nodes=[],M=null,playing=false,END=0;
+window.mandOver=(c,R)=>{if(!M||M.k<0)return;const s=M.seq,p=M.p,a=Math.max(0,M.k-3);c.save();c.shadowColor='#fff';c.shadowBlur=18;c.strokeStyle='rgba(255,255,255,.85)';c.lineWidth=3;c.beginPath();
+for(let i=a;i<=M.k;i++){const q=p[s[i]];i==a?c.moveTo(q[0]*R,q[1]*R):c.lineTo(q[0]*R,q[1]*R)}c.stroke();const q=p[s[M.k]];c.fillStyle='#fff';c.beginPath();c.arc(q[0]*R,q[1]*R,R*.03,0,TAU);c.fill();c.restore()};
+function stopM(){playing=false;nodes.forEach(o=>{try{o.stop()}catch(_){}});nodes=[];if(M){M.k=-1;mandRender()}}
+function playM(){stopM();const st=mandState(),g=melo.genG(graph(st.cur,st.n,st.L),$('mgs').value,256);M={p:g.p,seq:g.seq,notes:g.notes,k:-1};
+ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();const mg=ac.createGain();mg.gain.value=.5;mg.connect(ac.destination);const beat=60/90;let t=ac.currentTime+.1;
+M.notes.forEach(n=>{n.t=t;const d=n.d*beat,o=ac.createOscillator(),v=ac.createGain();o.type='triangle';o.frequency.value=n.f;v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(.5,t+.03);v.gain.exponentialRampToValueAtTime(.001,t+d*1.5);o.connect(v);v.connect(mg);o.start(t);o.stop(t+d*1.5+.05);nodes.push(o);t+=d});
+END=t+.5;playing=true;(function fr(){if(!playing)return;if(ac.currentTime>END){stopM();return}let k=0;M.notes.forEach((n,i)=>{if(n.t<=ac.currentTime)k=i});M.k=k;mandRender();requestAnimationFrame(fr)})()}
+$('mmp').onclick=playM;$('mms').onclick=stopM;
+$('mandala').addEventListener('input',e=>{if(playing&&e.target.id!='an')stopM()});
+$('chips').addEventListener('click',()=>{if(playing)stopM()});
+window.mandGraph=graph;
+})();
+</script><script>(function(){
+const $=i=>document.getElementById(i),PI=Math.PI,TAU=PI*2;let ac;
+const A=()=>{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();return ac};
+function beep(f,t,d,dest,g){const a=A(),o=a.createOscillator(),v=a.createGain();o.type='triangle';o.frequency.value=f;v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g||.3,t+.03);v.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(v);v.connect(dest||a.destination);o.start(t);o.stop(t+d+.05)}
+/* Cymatique */
+function dC(){const m=+$('ka').value,n=+$('kb').value,cv=$('cc'),x=cv.getContext('2d'),W=cv.width,d=x.createImageData(W,W);$('kav').textContent=m;$('kbv').textContent=n;
+for(let j=0;j<W;j++)for(let i=0;i<W;i++){const X=i/W,Y=j/W,v=Math.cos(n*PI*X)*Math.cos(m*PI*Y)-Math.cos(m*PI*X)*Math.cos(n*PI*Y),s=Math.exp(-Math.pow(v*4,2)),k=(j*W+i)*4;d.data[k]=217*s+7;d.data[k+1]=164*s+15;d.data[k+2]=65*s+22;d.data[k+3]=255}
+x.putImageData(d,0,0);const f=Math.min(3000,20*(m*m+n*n));$('kf').textContent=m==n?'Quand m = n, la plaque reste immobile : il n’y a pas de motif.':'Fréquence indicative : '+f+' Hz (plus il y a de lignes, plus le son est aigu).';return m==n?0:f}
+['ka','kb'].forEach(i=>$(i).oninput=dC);$('kp').onclick=()=>{const f=dC();if(f)beep(f,A().currentTime,2.5,null,.3)};
+/* Cercle des quintes */
+const NM=['Do','Sol','Ré','La','Mi','Si','Fa♯','Do♯','Sol♯','Ré♯','La♯','Fa','Do'],QF=NM.map((_,k)=>{let r=Math.pow(1.5,k);while(r>=2)r/=2;return 256*r});
+const QP=W=>NM.map((_,k)=>{const a=-PI/2+k*TAU/12,r=W*.34+k*W*.03/12;return[r*Math.cos(a),r*Math.sin(a)]});
+function dQ(h){const cv=$('qc'),x=cv.getContext('2d'),W=cv.width,P=QP(W);x.setTransform(1,0,0,1,0,0);x.fillStyle='#070f16';x.fillRect(0,0,W,W);x.translate(W/2,W/2);x.lineWidth=3;x.strokeStyle='#d9a441';x.beginPath();P.forEach((q,i)=>i?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1]));x.stroke();
+x.font='22px system-ui';x.textAlign='center';x.textBaseline='middle';P.forEach((q,i)=>{x.fillStyle=i==12?'#ff8a65':i==h?'#fff':'#4fd1c5';x.beginPath();x.arc(q[0],q[1],i==h?15:10,0,TAU);x.fill();x.fillStyle='#eee6d4';const k=1.16;x.fillText(NM[i]+(i==12?'′':''),q[0]*k,q[1]*k)});x.setTransform(1,0,0,1,0,0)}
+$('qc').onpointerdown=e=>{const cv=$('qc'),r=cv.getBoundingClientRect(),s=cv.width/r.width,X=(e.clientX-r.left)*s-cv.width/2,Y=(e.clientY-r.top)*s-cv.width/2,P=QP(cv.width);let b=0,bd=1e9;P.forEach((q,i)=>{const d=Math.hypot(q[0]-X,q[1]-Y);if(d<bd){bd=d;b=i}});dQ(b);beep(QF[b],A().currentTime,1.5,null,.3)};
+$('qp').onclick=()=>{const t=A().currentTime+.05;NM.forEach((_,k)=>{beep(QF[k],t+k*.4,.6,null,.3);setTimeout(()=>dQ(k),k*400)});setTimeout(()=>dQ(-1),13*400)};
+$('qi').textContent=QF.map((f,i)=>NM[i]+' '+f.toFixed(1)).join(' · ');
+/* Architecture */
+const AR=[['Stonehenge (Angleterre, vers 3000–2000 av. J.-C.)','Le cercle de pierres est aligné sur le lever du soleil au solstice d’été et sur son coucher au solstice d’hiver. La géométrie sert d’horloge du ciel.'],
+['Grande Pyramide de Gizeh (vers 2560 av. J.-C.)','Base d’environ 230 m de côté, hauteur d’origine d’environ 147 m. Le rapport entre l’apothème et la demi-base est proche de φ, et 4 fois la base divisé par la hauteur donne presque 2π. Coïncidence ou choix voulu : les historiens en débattent.'],
+['Parthénon (Athènes, 447–432 av. J.-C.)','Le plan suit surtout un rapport de 9 pour 4 ; la présence du nombre d’or y est discutée. Les colonnes sont légèrement bombées (entasis) pour corriger l’œil.'],
+['Panthéon de Rome (vers 126)','Le dôme mesure 43,3 m de diamètre et la hauteur sous voûte est la même : une sphère entière tiendrait dans la salle. L’oculus de 8 m laisse entrer un disque de lumière qui se déplace au fil du jour.'],
+['Angkor Vat (Cambodge, XIIe siècle)','Temple-montagne conçu comme un mandala : la tour centrale figure le mont Meru. À l’équinoxe, le soleil se lève sur cette tour, vu depuis l’entrée ouest.'],
+['Chartres (France, XIIIe siècle)','Le labyrinthe dallé de la nef mesure environ 13 m de diamètre, pour un parcours d’environ 260 m en 11 cercles. Les rosaces jouent sur des multiples de 12.'],
+['Darb-i Imam (Ispahan, 1453)','Son décor emploie cinq formes de tuiles (girih) qui couvrent le mur sans répéter le motif exactement, un type de pavage que les mathématiciens ont décrit seulement au XXe siècle.'],
+['Taj Mahal (Agra, 1632–1653)','Le mausolée repose sur un plan carré aux angles coupés, donc une symétrie d’ordre 8, au centre d’un jardin en quatre parties (charbagh) qui rappelle les quatre fleuves du paradis.'],
+['Sagrada Família (Barcelone, depuis 1882)','Gaudí dessine ses voûtes avec des cordes lestées suspendues : renversée, la forme de la chaînette donne l’arc qui porte le mieux la charge.'],
+['Le Modulor (Le Corbusier, 1948)','Un système de proportions fondé sur un homme de 1,83 m et sur le nombre d’or, pour que pièces et meubles gardent une échelle humaine.']];
+$('ag').innerHTML=AR.map(a=>`<div class="c"><h3>${a[0]}</h3><p>${a[1]}</p></div>`).join('');
+/* Concevoir un lieu */
+const RAT={carre:['Carré 1:1',1],double:['Double carré 1:2',2],or:['Nombre d’or 1:1,618',1.618034],quinte:['Quinte 2:3',1.5],quarte:['Quarte 3:4',4/3],r2:['Racine de 2 (1:1,414)',1.41421],tri:['Trois carrés 1:3',3]};
+$('dra').innerHTML=Object.keys(RAT).map(k=>`<option value="${k}">${RAT[k][0]}</option>`).join('');
+const IVS=[['unisson',1],['ton',9/8],['tierce mineure',6/5],['tierce majeure',5/4],['quarte',4/3],['quinte',1.5],['sixte mineure',1.6],['sixte majeure',5/3],['octave',2]],C=343;
+function st(){const sh=$('dsh').value,W=+$('dW').value,H=+$('dH').value,al=+$('dal').value/100,r=RAT[$('dra').value][1],L=W*r;let V,S;
+if(sh=='rect'){V=W*L*H;S=2*(W*L+W*H+L*H)}else{const n=+sh.slice(1),R=W/2,ar=n/2*R*R*Math.sin(TAU/n),sd=2*R*Math.sin(PI/n);V=ar*H;S=2*ar+n*sd*H}return{sh,W,H,al,L,r,V,S,rt:.161*V/(al*S)}}
+const up=f=>{while(f<130)f*=2;return f};
+function dD(){const s=st(),cv=$('dc'),x=cv.getContext('2d'),Z=cv.width,f=v=>(C/(2*v)).toFixed(1);$('dWv').textContent=s.W;$('dHv').textContent=s.H;$('dalv').textContent=s.al.toFixed(2);
+x.setTransform(1,0,0,1,0,0);x.fillStyle='#070f16';x.fillRect(0,0,Z,Z);x.translate(Z/2,Z/2);x.lineWidth=3;x.lineJoin='round';let t;
+if(s.sh=='rect'){const k=Z*.86/Math.max(s.L,s.W),w=s.L*k,h=s.W*k;x.strokeStyle='#d9a441';x.strokeRect(-w/2,-h/2,w,h);x.strokeStyle='#4fd1c5';x.lineWidth=1.5;let X=-w/2,Y=-h/2,ww=w,hh=h;
+for(let i=0;i<10;i++){const q=Math.min(ww,hh);if(q<3)break;const m=i%4;if(m==0){x.strokeRect(X,Y,q,q);X+=q;ww-=q}else if(m==1){x.strokeRect(X,Y,q,q);Y+=q;hh-=q}else if(m==2){x.strokeRect(X+ww-q,Y,q,q);ww-=q}else{x.strokeRect(X,Y+hh-q,q,q);hh-=q}}
+t=`<tr><th>Axe</th><th>Longueur</th><th>1er</th><th>2e</th><th>3e mode (Hz)</th></tr>`+[['Longueur',s.L],['Largeur',s.W],['Hauteur',s.H]].map(a=>`<tr><td>${a[0]}</td><td>${a[1].toFixed(1)} m</td><td>${f(a[1])}</td><td>${(2*C/(2*a[1])).toFixed(1)}</td><td>${(3*C/(2*a[1])).toFixed(1)}</td></tr>`).join('')}
+else{const n=+s.sh.slice(1),R=Z*.42,pts=Array.from({length:n},(_,i)=>[R*Math.cos(-PI/2+i*TAU/n),R*Math.sin(-PI/2+i*TAU/n)]),stp=Math.floor((n-1)/2);x.strokeStyle='#d9a441';x.beginPath();pts.forEach((q,i)=>i?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1]));x.closePath();x.stroke();x.strokeStyle='#4fd1c5';x.lineWidth=1.5;x.beginPath();pts.forEach((q,i)=>{const p=pts[(i*stp)%n];i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1])});x.closePath();x.stroke();x.beginPath();x.arc(0,0,R,0,TAU);x.stroke();x.beginPath();x.arc(0,0,R*.3,0,TAU);x.stroke();
+t=`<tr><th>Axe</th><th>Longueur</th><th>1er mode</th></tr><tr><td>Diamètre</td><td>${s.W.toFixed(1)} m</td><td>${f(s.W)} Hz</td></tr><tr><td>Hauteur</td><td>${s.H.toFixed(1)} m</td><td>${f(s.H)} Hz</td></tr>`}
+$('dtab').innerHTML=t;$('drs').textContent=`Volume ${Math.round(s.V)} m³ · surface ${Math.round(s.S)} m² · réverbération ≈ ${s.rt.toFixed(1)} s`;
+if(s.sh=='rect'){let r=s.r,o=0;while(r>2.0001){r/=2;o++}let b=IVS[0];IVS.forEach(v=>{if(Math.abs(Math.log2(v[1])-Math.log2(r))<Math.abs(Math.log2(b[1])-Math.log2(r)))b=v});$('din').textContent=`Les deux premières résonances (longueur et largeur) sont séparées d’un intervalle proche de la ${b[0]}${o?' + '+o+' octave'+(o>1?'s':''):''}.`}else $('din').textContent='Pour un plan polygonal, les valeurs de résonance sont approximatives (on prend le diamètre).'}
+['dsh','dra','dW','dH','dal'].forEach(i=>$(i).oninput=dD);
+$('dp1').onclick=()=>{const s=st(),a=A(),t=a.currentTime;(s.sh=='rect'?[s.L,s.W,s.H]:[s.W,s.H]).forEach(v=>beep(up(C/(2*v)),t,3,null,.25))};
+$('dp2').onclick=()=>{const s=st(),a=A(),rt=Math.min(s.rt,8),len=Math.floor(a.sampleRate*Math.min(8,rt*1.1)),b=a.createBuffer(2,len,a.sampleRate);
+for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.exp(-6.91*i/a.sampleRate/rt)}
+const cv=a.createConvolver();cv.buffer=b;const bus=a.createGain(),wet=a.createGain(),dry=a.createGain();wet.gain.value=.8;dry.gain.value=.25;bus.connect(cv);cv.connect(wet);wet.connect(a.destination);bus.connect(dry);dry.connect(a.destination);
+const t=a.currentTime+.05;[256,288,320,384,426.7,384,320,256].forEach((f,i)=>beep(f,t+i*.45,.5,bus,.5))};
+const PRE=[['Chambre','rect','carre',4,2.5,30],['Chapelle','rect','or',6,8,8],['Temple octogonal','p8','carre',16,14,10],['Cathédrale','rect','tri',20,25,12]];
+$('dpre').innerHTML=PRE.map((p,i)=>`<button data-i="${i}">${p[0]}</button>`).join('');
+$('dpre').onclick=e=>{const b=e.target.closest('button');if(!b)return;const p=PRE[b.dataset.i];$('dsh').value=p[1];$('dra').value=p[2];$('dW').value=p[3];$('dH').value=p[4];$('dal').value=p[5];dD()};
+dC();dQ(-1);dD();
+})();
+</script><script>(function(){
+const $=i=>document.getElementById(i),PI=Math.PI,TAU=PI*2;let ac;
+const A=()=>{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();return ac};
+function beep(f,t,d,g){const a=A(),o=a.createOscillator(),v=a.createGain();o.type='triangle';o.frequency.value=f;v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g||.3,t+.03);v.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(v);v.connect(a.destination);o.start(t);o.stop(t+d+.05)}
+/* --- Hypercube --- */
+const NOM=['point','segment','carré','cube','tesseract (hypercube)','penteract','hexeract','hepteract','octeract'],fr=x=>x.toLocaleString('fr-FR');
+$('dtb').innerHTML='<tr><th>Dim.</th><th>Forme</th><th>Sommets</th><th>Arêtes</th></tr>'+Array.from({length:13},(_,n)=>`<tr><td>${n}</td><td>${NOM[n]||'—'}</td><td>${fr(Math.pow(2,n))}</td><td>${fr(n*Math.pow(2,Math.max(n-1,0)))}</td></tr>`).join('');
+function dQ(t){const n=+$('nd').value,cv=$('dq'),x=cv.getContext('2d'),W=cv.width,N=1<<n;$('ndv').textContent=n;
+$('dinf').textContent=`${NOM[n]} : ${fr(N)} sommet${N>1?'s':''}, ${fr(n*Math.pow(2,Math.max(n-1,0)))} arête${n>1?'s':''}. Chaque dimension ajoutée double la figure et relie les deux copies.`;
+const th=Array.from({length:n},(_,i)=>i*PI/n+t),P=[];let m=1e-9;
+for(let v=0;v<N;v++){let a=0,b=0;for(let i=0;i<n;i++){const s=(v>>i&1)?1:-1;a+=s*Math.cos(th[i]);b+=s*Math.sin(th[i])}P.push([a,b]);m=Math.max(m,Math.hypot(a,b))}
+const k=W*.42/m;x.fillStyle='#070f16';x.fillRect(0,0,W,W);x.lineWidth=n>6?1:2;x.lineCap='round';
+for(let i=0;i<n;i++){x.strokeStyle=`hsl(${45+i*40},75%,60%)`;x.beginPath();for(let v=0;v<N;v++)if(!(v>>i&1)){const p=P[v],q=P[v|1<<i];x.moveTo(W/2+p[0]*k,W/2+p[1]*k);x.lineTo(W/2+q[0]*k,W/2+q[1]*k)}x.stroke()}
+if(N<=64){x.fillStyle='#eee6d4';P.forEach(p=>{x.beginPath();x.arc(W/2+p[0]*k,W/2+p[1]*k,4,0,TAU);x.fill()})}else if(!n){}
+if(!n){x.fillStyle='#eee6d4';x.beginPath();x.arc(W/2,W/2,6,0,TAU);x.fill()}}
+$('nd').oninput=()=>dQ(T);let T=0;
+/* --- 12 dimensions --- */
+const GR=[['Le monde de la forme (1–3)',[['La ligne','Une seule direction : l’élan, le chemin, la vie qui avance.'],['Le plan','Deux directions : la surface et la dualité (droite et gauche, haut et bas).'],['Le volume','Trois directions : la matière et notre monde de solides, le cube, la sphère.']]],
+['Le monde du mouvement (4–6)',[['Le temps','La quatrième direction : le changement, les cycles, la mémoire des choses.'],['Le lien','L’unité vécue : tout est relié, l’amour comme force qui unit.'],['Les modèles','Les formes-archétypes d’où naissent les choses : la géométrie sacrée comme plan de la création.']]],
+['Le monde de la vibration (7–9)',[['Le son originel','La vibration avant la forme : le Verbe, l’Om, la note qui précède la matière.'],['La lumière','La vibration devenue couleur : le spectre, l’éclat, la clarté.'],['La mémoire du tout','Le registre où tout ce qui a été reste inscrit (les « annales akashiques » de la théosophie).']]],
+['Le monde de l’unité (10–12)',[['La totalité','Tous les possibles réunis, sans opposition.'],['Le passage','Le seuil entre le multiple et l’un, où les formes se dissolvent.'],['La Source','L’un d’où tout part et où tout revient : le point du début, qui contient déjà le cercle.']]]];
+let k2=0;$('dg').innerHTML=GR.map(g=>`<h3 style="grid-column:1/-1;margin-top:8px">${g[0]}</h3>`+g[1].map(d=>{k2++;return`<div class="c" data-k="${k2}" style="cursor:pointer"><h3>${k2} · ${d[0]}</h3><p>${d[1]}</p><p style="font-size:.8rem">Toucher pour entendre l’harmonique ${k2}</p></div>`}).join('')).join('');
+$('dg').onclick=e=>{const c=e.target.closest('.c');if(c)beep(128*c.dataset.k,A().currentTime,1.6,.3)};
+$('dpl').onclick=()=>{const t=A().currentTime+.05;for(let i=1;i<=12;i++)beep(128*i,t+(i-1)*.45,.9,.25);for(let i=1;i<=12;i++)beep(128*i,t+13*.45,3,.08)};
+/* --- Anges : 9 chœurs --- */
+const CH=['Séraphins','Chérubins','Trônes','Dominations','Vertus','Puissances','Principautés','Archanges','Anges'],CC=['#d9a441','#4fd1c5','#ff8a65'];
+function dN(){const cv=$('nc'),x=cv.getContext('2d'),W=cv.width,R=W*.33,P=CH.map((_,i)=>[W/2+R*Math.cos(-PI/2+i*TAU/9),W/2+R*Math.sin(-PI/2+i*TAU/9)]);
+x.fillStyle='#070f16';x.fillRect(0,0,W,W);x.lineWidth=2;x.lineJoin='round';x.strokeStyle='rgba(238,230,212,.25)';x.beginPath();P.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.closePath();x.stroke();
+for(let r=0;r<3;r++){x.strokeStyle=CC[r];x.globalAlpha=.7;x.beginPath();[r,r+3,r+6].forEach((i,j)=>j?x.lineTo(P[i][0],P[i][1]):x.moveTo(P[i][0],P[i][1]));x.closePath();x.stroke()}x.globalAlpha=1;
+x.font='21px system-ui';x.textAlign='center';x.textBaseline='middle';P.forEach((p,i)=>{x.fillStyle=CC[Math.floor(i/3)];x.beginPath();x.arc(p[0],p[1],9,0,TAU);x.fill();x.fillStyle='#eee6d4';const a=-PI/2+i*TAU/9;x.fillText(CH[i],W/2+(R+52)*Math.cos(a),W/2+(R+52)*Math.sin(a))})}
+/* --- Anges : roue des 72 --- */
+const AN='Vehuiah,Jeliel,Sitael,Elemiah,Mahasiah,Lelahel,Achaiah,Cahethel,Haziel,Aladiah,Laoviah,Hahaiah,Yesalel,Mebahel,Hariel,Hekamiah,Lauviah,Caliel,Leuviah,Pahaliah,Nelchael,Yeiayel,Melahel,Haheuiah,Nith-Haiah,Haaiah,Yerathel,Seheiah,Reyayel,Omael,Lecabel,Vasariah,Yehuiah,Lehahiah,Chavakiah,Menadel,Aniel,Haamiah,Rehael,Ieiazel,Hahahel,Mikael,Veuliah,Yelahiah,Sealiah,Ariel,Asaliah,Mihael,Vehuel,Daniel,Hahasiah,Imamiah,Nanael,Nithael,Mebahiah,Poyel,Nemamiah,Yeialel,Harahel,Mitzrael,Umabel,Iah-Hel,Anauel,Mehiel,Damabiah,Manakel,Eyael,Habuhiah,Rochel,Jabamiah,Haiaiel,Mumiah'.split(','),
+SG=['Bélier','Taureau','Gémeaux','Cancer','Lion','Vierge','Balance','Scorpion','Sagittaire','Capricorne','Verseau','Poissons'],fq=i=>256*Math.pow(2,i/72);
+function dW(h){const cv=$('wc'),x=cv.getContext('2d'),W=cv.width,R=W*.47,c=W/2,s=TAU/72;x.setTransform(1,0,0,1,0,0);x.fillStyle='#070f16';x.fillRect(0,0,W,W);
+for(let i=0;i<72;i++){const a=-PI/2+i*s,g=Math.floor(i/6);x.beginPath();x.arc(c,c,R,a,a+s);x.arc(c,c,R*.62,a+s,a,true);x.closePath();x.fillStyle=i==h?'#fff':`hsl(${g*30},55%,${(i%6)%2?32:26}%)`;x.fill();x.strokeStyle='#070f16';x.lineWidth=1;x.stroke()}
+x.strokeStyle='#d9a441';x.lineWidth=2;for(let g=0;g<12;g++){const a=-PI/2+g*TAU/12;x.beginPath();x.moveTo(c+R*.62*Math.cos(a),c+R*.62*Math.sin(a));x.lineTo(c+R*Math.cos(a),c+R*Math.sin(a));x.stroke()}
+x.fillStyle='#eee6d4';x.font='19px system-ui';x.textAlign='center';x.textBaseline='middle';SG.forEach((n,g)=>{const a=-PI/2+(g+.5)*TAU/12;x.fillText(n.slice(0,3),c+R*.5*Math.cos(a),c+R*.5*Math.sin(a))});
+$('wi').textContent=h<0?'Touche un segment pour lire son nom et l’entendre.':`${h+1}. ${AN[h]} · ${SG[Math.floor(h/6)]} ${(h%6)*5}°–${(h%6)*5+5}° · ${fq(h).toFixed(1)} Hz`}
+$('wc').onpointerdown=e=>{const cv=$('wc'),r=cv.getBoundingClientRect(),z=cv.width/r.width,X=(e.clientX-r.left)*z-cv.width/2,Y=(e.clientY-r.top)*z-cv.width/2;if(Math.hypot(X,Y)<cv.width*.29)return;const i=Math.floor(((Math.atan2(Y,X)+PI/2+TAU)%TAU)/(TAU/72))%72;dW(i);beep(fq(i),A().currentTime,1.2,.3)};
+$('wp').onclick=()=>{const t=A().currentTime+.05;for(let i=0;i<72;i++){beep(fq(i),t+i*.11,.25,.2);setTimeout(()=>dW(i),i*110)}setTimeout(()=>dW(-1),72*110)};
+(function loop(){if($('dim12').classList.contains('show')){T+=.008;dQ(T)}requestAnimationFrame(loop)})();
+dQ(0);dN();dW(-1);window.__AN=AN;
+})();
+</script><script>(function(){
+const $=i=>document.getElementById(i),PI=Math.PI,TAU=PI*2,R2D=180/PI,D2R=PI/180,norm=a=>((a%360)+360)%360,sn=a=>Math.sin(a*D2R),cs=a=>Math.cos(a*D2R),at2=(y,x)=>Math.atan2(y,x)*R2D;
+const SG=['Bélier','Taureau','Gémeaux','Cancer','Lion','Vierge','Balance','Scorpion','Sagittaire','Capricorne','Verseau','Poissons'],AN=window.__AN,fq=l=>256*Math.pow(2,l/360);
+let ac,last=null;const A=()=>{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();return ac};
+function beep(f,t,d,g){const a=A(),o=a.createOscillator(),v=a.createGain();o.type='triangle';o.frequency.value=f;v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g||.3,t+.03);v.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(v);v.connect(a.destination);o.start(t);o.stop(t+d+.05)}
+/* --- Éphéméride simplifiée (éléments képlériens, précision de l’ordre du demi-degré ou mieux) --- */
+const B={sun:d=>[0,0,282.9404+4.70935e-5*d,1,0.016709-1.151e-9*d,356.0470+0.9856002585*d],
+moon:d=>[125.1228-0.0529538083*d,5.1454,318.0634+0.1643573223*d,60.2666,0.0549,115.3654+13.0649929509*d],
+mer:d=>[48.3313+3.24587e-5*d,7.0047+5e-8*d,29.1241+1.01444e-5*d,0.387098,0.205635+5.59e-10*d,168.6562+4.0923344368*d],
+ven:d=>[76.6799+2.4659e-5*d,3.3946+2.75e-8*d,54.8910+1.38374e-5*d,0.72333,0.006773-1.302e-9*d,48.0052+1.6021302244*d],
+mar:d=>[49.5574+2.11081e-5*d,1.8497-1.78e-8*d,286.5016+2.92961e-5*d,1.523688,0.093405+2.516e-9*d,18.6021+0.5240207766*d],
+jup:d=>[100.4542+2.76854e-5*d,1.3030-1.557e-7*d,273.8777+1.64505e-5*d,5.20256,0.048498+4.469e-9*d,19.8950+0.0830853001*d],
+sat:d=>[113.6634+2.3898e-5*d,2.4886-1.081e-7*d,339.3939+2.97661e-5*d,9.55475,0.055546-9.499e-9*d,316.9670+0.0334442282*d],
+ura:d=>[74.0005+1.3978e-5*d,0.7733+1.9e-8*d,96.6612+3.0565e-5*d,19.18171-1.55e-8*d,0.047318+7.45e-9*d,142.5905+0.011725806*d],
+nep:d=>[131.7806+3.0173e-5*d,1.77-2.55e-7*d,272.8461-6.027e-6*d,30.05826+3.313e-8*d,0.008606+2.15e-9*d,260.2471+0.005995147*d]};
+function kep(M,e){let E=M+e*R2D*sn(M)*(1+e*cs(M));for(let i=0;i<8;i++)E-=(E-e*R2D*sn(E)-M)/(1-e*cs(E));return E}
+const RM=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+function houses(ram,eps,lat,asc,mc){if(Math.abs(lat)>66)return Array.from({length:12},(_,i)=>norm(asc+30*i));const tl=Math.tan(lat*D2R);
+const cu=(f,n)=>{let R=n?ram+180-f*90:ram+f*90,l=0;for(let i=0;i<60;i++){l=at2(sn(R),cs(R)*cs(eps));const dc=Math.asin(sn(eps)*sn(l)),x=Math.max(-1,Math.min(1,-tl*Math.tan(dc))),ds=Math.acos(x)*R2D;R=n?ram+180-f*(180-ds):ram+f*ds}return norm(l)};
+const c11=cu(1/3,0),c12=cu(2/3,0),c2=cu(2/3,1),c3=cu(1/3,1);return[asc,c2,c3,norm(mc+180),norm(c11+180),norm(c12+180),norm(asc+180),norm(c2+180),norm(c3+180),mc,c11,c12]}
+const hOf=(l,H)=>{for(let i=0;i<12;i++)if(norm(l-H[i])<norm(H[(i+1)%12]-H[i]))return i;return 0};
+function chart(ms,lat,lon){const jd=ms/86400000+2440587.5,d=jd-2451543.5,el={};for(const k in B)el[k]=B[k](d);
+const P=k=>{const[N,i,w,a,e,M]=el[k],E=kep(M,e),xv=a*(cs(E)-e),yv=a*Math.sqrt(1-e*e)*sn(E);return{N,i,w,M,v:at2(yv,xv),r:Math.hypot(xv,yv)}},
+XY=(p,u)=>[p.r*(cs(p.N)*cs(u)-sn(p.N)*sn(u)*cs(p.i)),p.r*(sn(p.N)*cs(u)+cs(p.N)*sn(u)*cs(p.i))];
+const s=P('sun'),ls=norm(s.v+s.w),xs=s.r*cs(ls),ys=s.r*sn(ls),o={sun:ls};
+const m=P('moon'),mh=XY(m,m.v+m.w),Ls=s.w+s.M,Lm=m.N+m.w+m.M,D=Lm-Ls,F=Lm-m.N,Ms=s.M,Mm=m.M;
+o.moon=norm(at2(mh[1],mh[0])-1.274*sn(Mm-2*D)+.658*sn(2*D)-.186*sn(Ms)-.059*sn(2*Mm-2*D)-.057*sn(Mm-2*D+Ms)+.053*sn(Mm+2*D)+.046*sn(2*D-Ms)+.041*sn(Mm-Ms)-.035*sn(D)-.031*sn(Mm+Ms)-.015*sn(2*F-2*D)+.011*sn(Mm-4*D));
+const Mj=el.jup[5],Mk=el.sat[5],Mu=el.ura[5];
+const pt={jup:-.332*sn(2*Mj-5*Mk-67.6)-.056*sn(2*Mj-2*Mk+21)+.042*sn(3*Mj-5*Mk+21)-.036*sn(Mj-2*Mk)+.022*cs(Mj-Mk)+.023*sn(2*Mj-3*Mk+52)-.016*sn(Mj-5*Mk-69),
+sat:.812*sn(2*Mj-5*Mk-67.6)-.229*cs(2*Mj-4*Mk-2)+.119*sn(Mj-2*Mk-3)+.046*sn(2*Mj-6*Mk-69)+.014*sn(Mj-3*Mk+32),
+ura:.04*sn(Mk-2*Mu+6)+.035*sn(Mk-3*Mu+33)-.015*sn(Mj-Mu+20)};
+['mer','ven','mar','jup','sat','ura','nep'].forEach(k=>{const p=P(k),h=XY(p,p.v+p.w);o[k]=norm(at2(h[1]+ys,h[0]+xs)+(pt[k]||0))});
+const ram=norm(280.46061837+360.98564736629*(jd-2451545)+lon),eps=23.4393-3.563e-7*d;
+o.mc=norm(at2(sn(ram),cs(ram)*cs(eps)));o.asc=norm(at2(cs(ram),-(sn(ram)*cs(eps)+Math.tan(lat*D2R)*sn(eps))));o._ram=ram;o._eps=eps;o._h=houses(ram,eps,lat,o.asc,o.mc);o._lat=lat;return o}
+function offs(t,tz){const p=new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',second:'numeric'}).formatToParts(new Date(t)),o={};p.forEach(q=>o[q.type]=+q.value);return Date.UTC(o.year,o.month-1,o.day,o.hour%24,o.minute,o.second)-t}
+function toUTC(y,mo,d,h,mi,tz){const w=Date.UTC(y,mo-1,d,h,mi);let t=w-offs(w,tz);t=w-offs(t,tz);return t}
+/* --- Traditions --- */
+const NM={sun:'Soleil',moon:'Lune',mer:'Mercure',ven:'Vénus',mar:'Mars',jup:'Jupiter',sat:'Saturne',ura:'Uranus',nep:'Neptune',asc:'Ascendant',mc:'Milieu du ciel'},AB={sun:'Sol',moon:'Lun',mer:'Mer',ven:'Vén',mar:'Mar',jup:'Jup',sat:'Sat',ura:'Ura',nep:'Nep',asc:'Asc',mc:'MC'},KEYS=Object.keys(NM);
+const MAN='Ash-Sharatayn,Al-Butayn,Ath-Thurayya,Ad-Dabaran,Al-Haq‘ah,Al-Han‘ah,Adh-Dhira‘,An-Nathrah,At-Tarf,Al-Jabhah,Az-Zubrah,As-Sarfah,Al-‘Awwa’,As-Simak,Al-Ghafr,Az-Zubana,Al-Iklil,Al-Qalb,Ash-Shawlah,An-Na‘a’im,Al-Baldah,Sa‘d adh-Dhabih,Sa‘d Bula‘,Sa‘d as-Su‘ud,Sa‘d al-Akhbiyah,Al-Fargh al-Muqaddam,Al-Fargh al-Mu’akhkhar,Batn al-Hut'.split(',');
+const ZD=[['Hormazd','Ahura Mazda, le Seigneur sage'],['Vohuman','la Bonne Pensée'],['Ardibehesht','l’Ordre vrai, la vérité excellente'],['Shahrevar','le Pouvoir désirable'],['Spandarmad','la Dévotion sainte, la terre'],['Khordad','l’Intégrité, la santé'],['Amurdad','l’Immortalité'],['Dae-pa-Adar','le Créateur, avant le Feu'],['Adar','le Feu'],['Aban','les Eaux'],['Khwar','le Soleil'],['Mah','la Lune'],['Tir','Tishtrya, l’étoile de la pluie'],['Gosh','l’âme du bétail'],['Dae-pa-Mihr','le Créateur, avant Mithra'],['Mihr','Mithra, l’alliance et la lumière'],['Sarosh','Sraosha, l’obéissance et la prière'],['Rashn','Rashnu, la justice'],['Farvardin','les Fravashis, esprits gardiens'],['Bahram','Verethragna, la victoire'],['Ram','la paix'],['Bad','Vayu, le vent'],['Dae-pa-Din','le Créateur, avant la Conscience'],['Din','Daena, la conscience'],['Ard','Ashi, la récompense'],['Ashtad','Arshtat, la droiture'],['Asman','le Ciel'],['Zamyad','la Terre'],['Mahraspand','la Parole sainte'],['Aniran','la Lumière sans commencement']];
+const ZM=['Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar','Mehr','Aban','Azar','Dey','Bahman','Esfand'],ZG=['Ahunavad','Ushtavad','Spentomad','Vohukhshathra','Vahishtoisht'];
+const NKS=[['Ashwini','les Ashvins'],['Bharani','Yama'],['Krittika','Agni'],['Rohini','Brahma'],['Mrigashira','Soma'],['Ardra','Rudra'],['Punarvasu','Aditi'],['Pushya','Brihaspati'],['Ashlesha','les Nagas'],['Magha','les Ancêtres (Pitris)'],['Purva Phalguni','Bhaga'],['Uttara Phalguni','Aryaman'],['Hasta','Savitar'],['Chitra','Tvashtar'],['Swati','Vayu'],['Vishakha','Indra et Agni'],['Anuradha','Mitra'],['Jyeshtha','Indra'],['Mula','Nirriti'],['Purva Ashadha','les Eaux (Apas)'],['Uttara Ashadha','les Vishvadevas'],['Shravana','Vishnu'],['Dhanishta','les Vasus'],['Shatabhisha','Varuna'],['Purva Bhadrapada','Aja Ekapada'],['Uttara Bhadrapada','Ahir Budhnya'],['Revati','Pushan']];
+const CHR=[['Michel, Gabriel, Raphaël','Les trois archanges nommés dans la Bible : Michel (Daniel 12, Apocalypse 12), Gabriel (Luc 1) et Raphaël (livre de Tobie).'],['Les sept archanges','Le livre d’Hénoch en compte sept : Uriel, Raphaël, Ragouël, Michel, Sariel, Gabriel et Rémiel. Le livre de Tobie parle aussi de « sept anges ». Sept points forment un heptagone.'],['Les neuf chœurs','Trois hiérarchies de trois (voir la page « Géométrie des anges »).'],['L’ange gardien','Selon Matthieu 18:10, les enfants ont des anges qui voient la face du Père ; la tradition en a fait un ange gardien pour chacun.']],
+HIN=[['Les 33 devas','Dans les Védas, 33 divinités : 8 Vasus, 11 Rudras, 12 Adityas, plus deux autres (Indra et Prajapati, ou les deux Ashvins selon les textes). Les devas ne sont pas des anges au sens strict, mais des êtres de lumière.'],['Les 12 Adityas','Fils d’Aditi, ils sont liés aux 12 mois du soleil, comme les 12 signes.'],['Les 9 Navagraha','Les planètes sont des divinités : Surya (Soleil), Chandra (Lune), Mangala (Mars), Budha (Mercure), Brihaspati (Jupiter), Shukra (Vénus), Shani (Saturne), et Rahu et Ketu, les nœuds de la Lune.'],['Les 27 nakshatras','Le cercle est divisé en 27 demeures lunaires de 13°20′, chacune sous une divinité, et en 4 padas de 3°20′ (27 × 4 = 108).']],
+BOU=[['Les devas','Dans le bouddhisme, les devas vivent dans des cieux heureux mais restent soumis à la renaissance : ce ne sont pas des êtres libérés.'],['Les quatre rois célestes','Dhritarashtra (est), Virudhaka (sud), Virupaksha (ouest), Vaishravana (nord) : les gardiens des quatre directions.'],['Les cinq Bouddhas de sagesse','Vairocana au centre, Akshobhya à l’est, Ratnasambhava au sud, Amitabha à l’ouest, Amoghasiddhi au nord : un mandala en quinconce.'],['Les bodhisattvas','Avalokiteshvara (compassion), Manjushri (sagesse), Kshitigarbha (vœux) et Samantabhadra (pratique) sont souvent honorés comme les grands bodhisattvas.']];
+$('bch').innerHTML=CHR.map(a=>`<div class="c"><h3>${a[0]}</h3><p>${a[1]}</p></div>`).join('');$('bhi').innerHTML=HIN.map(a=>`<div class="c"><h3>${a[0]}</h3><p>${a[1]}</p></div>`).join('');$('bbu').innerHTML=BOU.map(a=>`<div class="c"><h3>${a[0]}</h3><p>${a[1]}</p></div>`).join('');
+const ARC=[['Jibrīl (Gabriel)','Le messager de la révélation : la tradition dit qu’il a transmis le Coran au prophète Muhammad.'],['Mīkāʾīl (Michel)','Associé aux bienfaits de la vie : la pluie, la végétation et la subsistance.'],['Isrāfīl','Celui qui soufflera dans la trompette annonçant le jour de la résurrection.'],['ʿAzrāʾīl','L’ange de la mort ; le Coran (32:11) parle de « l’ange de la mort » sans le nommer, et la tradition lui donne ce nom.']];
+const AMS=[['Vohu Manah','la Bonne Pensée','le bétail'],['Asha Vahishta','l’Ordre vrai','le feu'],['Khshathra Vairya','le Pouvoir désirable','les métaux et le ciel'],['Spenta Armaiti','la Dévotion sainte','la terre'],['Haurvatat','l’Intégrité','les eaux'],['Ameretat','l’Immortalité','les plantes']];
+$('bam').innerHTML=ARC.map(a=>`<div class="c"><h3>${a[0]}</h3><p>${a[1]}</p></div>`).join('');
+$('bzo').innerHTML=AMS.map(a=>`<div class="c"><h3>${a[0]}</h3><p>${a[1]}. Veille sur ${a[2]}.</p></div>`).join('');
+const CT=[['Amiens',49.8941,2.2957,'Europe/Paris'],['Paris',48.8566,2.3522,'Europe/Paris'],['Lille',50.6292,3.0573,'Europe/Paris'],['Rouen',49.4432,1.0993,'Europe/Paris'],['Lyon',45.764,4.8357,'Europe/Paris'],['Marseille',43.2965,5.3698,'Europe/Paris'],['Bordeaux',44.8378,-.5792,'Europe/Paris'],['Toulouse',43.6047,1.4442,'Europe/Paris'],['Strasbourg',48.5734,7.7521,'Europe/Paris'],['Nantes',47.2184,-1.5536,'Europe/Paris'],['Bruxelles',50.8503,4.3517,'Europe/Brussels'],['Genève',46.2044,6.1432,'Europe/Zurich'],['Londres',51.5074,-.1278,'Europe/London'],['Montréal',45.5017,-73.5673,'America/Toronto'],['New York',40.7128,-74.006,'America/New_York'],['Alger',36.7538,3.0588,'Africa/Algiers'],['Dakar',14.7167,-17.4677,'Africa/Dakar']];
+$('bc').innerHTML='<option value="-1">Autre lieu (saisir les coordonnées)</option>'+CT.map((c,i)=>`<option value="${i}">${c[0]}</option>`).join('');
+$('bc').onchange=()=>{const c=CT[+$('bc').value];if(c){$('bla').value=c[1];$('blo').value=c[2];$('btz').value=c[3]}};
+/* --- Roue avec repères --- */
+function dNW(o){const cv=$('nw'),x=cv.getContext('2d'),W=cv.width,R=W*.47,c=W/2,s=TAU/72,hit={};x.setTransform(1,0,0,1,0,0);x.fillStyle='#070f16';x.fillRect(0,0,W,W);
+if(o)KEYS.forEach(k=>hit[Math.floor(o[k]/5)]=1);
+for(let i=0;i<72;i++){const a=-PI/2+i*s,g=Math.floor(i/6);x.beginPath();x.arc(c,c,R,a,a+s);x.arc(c,c,R*.62,a+s,a,true);x.closePath();x.fillStyle=hit[i]?`hsl(${g*30},70%,55%)`:`hsl(${g*30},45%,${(i%6)%2?26:21}%)`;x.fill();x.strokeStyle='#070f16';x.lineWidth=1;x.stroke()}
+x.strokeStyle='#d9a441';x.lineWidth=2;for(let g=0;g<12;g++){const a=-PI/2+g*TAU/12;x.beginPath();x.moveTo(c+R*.62*Math.cos(a),c+R*.62*Math.sin(a));x.lineTo(c+R*Math.cos(a),c+R*Math.sin(a));x.stroke()}
+x.fillStyle='#9fb0b6';x.font='17px system-ui';x.textAlign='center';x.textBaseline='middle';SG.forEach((n,g)=>{const a=-PI/2+(g+.5)*TAU/12;x.fillText(n.slice(0,3),c+R*.45*Math.cos(a),c+R*.45*Math.sin(a))});
+if(o&&o._h){x.strokeStyle='rgba(238,230,212,.55)';x.lineWidth=1.5;o._h.forEach(l=>{const a=-PI/2+l*D2R;x.beginPath();x.moveTo(c+R*.2*Math.cos(a),c+R*.2*Math.sin(a));x.lineTo(c+R*.62*Math.cos(a),c+R*.62*Math.sin(a));x.stroke()});x.fillStyle='#d9a441';x.font='15px system-ui';o._h.forEach((l,i)=>{const a=-PI/2+(l+norm(o._h[(i+1)%12]-l)/2)*D2R;x.fillText(RM[i],c+R*.3*Math.cos(a),c+R*.3*Math.sin(a))})}
+if(o){x.font='bold 15px system-ui';KEYS.forEach((k,j)=>{const a=-PI/2+o[k]*D2R,r=R*(.86-(j%3)*.07);x.fillStyle='#fff';x.beginPath();x.arc(c+r*Math.cos(a),c+r*Math.sin(a),4,0,TAU);x.fill();x.fillStyle='#fff';x.fillText(AB[k],c+(r-.075*R)*Math.cos(a)*1,c+(r-.075*R)*Math.sin(a))})}}
+const fmt=l=>{const g=Math.floor(l%30),m=Math.floor((l%30-g)*60);return `${SG[Math.floor(l/30)]} ${g}°${String(m).padStart(2,'0')}′`};
+function go(){const dv=$('bd').value,tv=$('bt').value||'12:00',la=parseFloat($('bla').value),lo=parseFloat($('blo').value),tz=($('btz').value||'UTC').trim();
+if(!dv||isNaN(la)||isNaN(lo)){$('bmsg').textContent='Indique la date, le lieu (ou latitude et longitude).';return}
+const[y,mo,d]=dv.split('-').map(Number),[h,mi]=tv.split(':').map(Number);let ms;try{ms=toUTC(y,mo,d,h,mi,tz)}catch(e){$('bmsg').textContent='Fuseau horaire inconnu : essaie par exemple Europe/Paris.';return}
+const o=chart(ms,la,lo);last=o;$('bmsg').textContent='Calcul fait dans ton navigateur : rien n’est envoyé ni enregistré.';dNW(o);
+const ah=AN[Math.floor((h*60+mi)/20)%72],as=AN[Math.floor(o.sun/5)];
+$('bres').innerHTML=`<table><tr><th>Point</th><th>Position</th><th>Maison</th><th>Ange de la roue des 72</th></tr>${KEYS.map(k=>`<tr><td>${NM[k]}</td><td>${fmt(o[k])}</td><td>${k=='asc'?'I':k=='mc'?'X':RM[hOf(o[k],o._h)]}</td><td>${Math.floor(o[k]/5)+1}. ${AN[Math.floor(o[k]/5)]}</td></tr>`).join('')}</table>
+<p><b>Pointes des maisons</b> (${Math.abs(o._lat)>66?'maisons égales, car la latitude est trop haute pour Placidus':'système Placidus'}) : ${o._h.map((l,i)=>RM[i]+' '+fmt(l)).join(' · ')}.</p>
+<p><b>Ange du jour</b> (celui du Soleil, ${fmt(o.sun)}) : ${as}. <b>Ange de l’heure</b> (tranches de 20 minutes depuis minuit, heure locale ${tv}) : ${ah}.</p>`;
+const mn=Math.floor(o.moon/(360/28));$('bmn').innerHTML=`<b>Ta demeure lunaire</b> : la Lune est en ${fmt(o.moon)}, dans la demeure n° ${mn+1}, <i>${MAN[mn]}</i>.`;
+const ny=(mo>3||(mo==3&&d>=21))?y:y-1,dd=Math.round((Date.UTC(y,mo-1,d)-Date.UTC(ny,2,21))/864e5);let zt;
+if(dd<360){const md=dd%30,mm=Math.floor(dd/30);zt=`Le ${md+1}ᵉ jour du mois de ${ZM[mm]} : le jour <i>${ZD[md][0]}</i> (${ZD[md][1]}). Le mois ${ZM[mm]} a lui aussi son yazata.`}else{const g=Math.min(4,dd-360);zt=`Le ${g+1}ᵉ des cinq jours des Gathas, en fin d’année : <i>${ZG[g]}</i>.`}
+const wd=new Date(Date.UTC(y,mo-1,d)).getUTCDay(),CW=[['dimanche','Soleil','Michel'],['lundi','Lune','Gabriel'],['mardi','Mars','Samaël'],['mercredi','Mercure','Raphaël'],['jeudi','Jupiter','Zachariel'],['vendredi','Vénus','Anaël'],['samedi','Saturne','Orifiel']];
+$('bchp').innerHTML=`<b>Ton archange du jour</b> : né un ${CW[wd][0]}, jour de ${CW[wd][1]}, tu relèves de l’archange <i>${CW[wd][2]}</i> selon Trithème (1508).`;
+const ay=23.853+(y+(mo-1)/12-2000)*.013969,sid=l=>norm(l-ay),NK=Math.floor(sid(o.moon)/(360/27)),pd=Math.floor((sid(o.moon)%(360/27))/(360/108))+1,RS=['Mesha','Vrishabha','Mithuna','Karka','Simha','Kanya','Tula','Vrishchika','Dhanu','Makara','Kumbha','Meena'];
+$('bhip').innerHTML=`<b>Ton nakshatra</b> (zodiaque sidéral, ayanamsha Lahiri ≈ ${Math.floor(ay)}°${String(Math.round((ay%1)*60)).padStart(2,'0')}′) : la Lune est dans <i>${NKS[NK][0]}</i>, pada ${pd}, sous la divinité <i>${NKS[NK][1]}</i>. Ton Soleil sidéral est en ${RS[Math.floor(sid(o.sun)/30)]} (${Math.floor(sid(o.sun)%30)}°), ta Lune en ${RS[Math.floor(sid(o.moon)/30)]}.`;
+const BW=[['Bouddha debout, mains croisées, regardant l’arbre de la Bodhi','Pang Tawai Netra'],['Bouddha debout, une main levée pour apaiser un conflit entre ses proches','Pang Ham Yat'],['Bouddha couché sur le flanc droit, au moment du parinirvana','Pang Sai Yat'],['Bouddha debout, tenant son bol à aumônes','Pang Umbat'],['Bouddha assis en méditation, mains sur les genoux','Pang Samathi'],['Bouddha debout, mains croisées sur la poitrine, en contemplation','Pang Ram Peung'],['Bouddha assis, abrité par le naga aux sept têtes','Pang Nak Prok']],bb=(wd==3&&h>=18)?['Bouddha dans la forêt, servi par un éléphant et un singe (mercredi soir)','Pang Pa Lelai']:BW[wd];
+$('bbup').innerHTML=`<b>Ton Bouddha du jour</b> (tradition thaïlandaise, selon le jour de la semaine de naissance) : ${bb[0]} (<i>${bb[1]}</i>).`;
+$('bzd').innerHTML='<b>Ton jour zoroastrien</b> (calendrier fasli simplifié, année à partir du 21 mars) : '+zt}
+$('bgo').onclick=go;
+$('bpl').onclick=()=>{if(!last){$('bmsg').textContent='Calcule d’abord ton thème.';return}const t=A().currentTime+.05;KEYS.forEach((k,i)=>beep(fq(last[k]),t+i*.45,1.6,.25));KEYS.forEach(k=>beep(fq(last[k]),t+KEYS.length*.45+.2,3,.07))};
+window.__natal={chart,toUTC,go};dNW(null);
+})();
+</script></body></html>
